@@ -35,6 +35,7 @@ $parent_id = trim($body['parent_id'] ?? '');
 $fname     = trim($body['fname']     ?? '');
 $lname     = trim($body['lname']     ?? '');
 $age       = (int)($body['age']      ?? 0);
+$gender    = in_array($body['gender'] ?? '', ['boy','girl']) ? $body['gender'] : 'boy';
 $disease   = trim($body['disease']   ?? '');
 
 if (!$parent_id) err_resp('parent_id مطلوب');
@@ -72,6 +73,7 @@ $child = [
     'fname'      => $fname,
     'lname'      => $lname,
     'age'        => $age,
+    'gender'     => $gender,
     'username'   => $username,
     'created_at' => date('Y-m-d H:i:s'),
 ];

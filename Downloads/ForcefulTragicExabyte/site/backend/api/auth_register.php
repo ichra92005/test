@@ -43,6 +43,7 @@ $p_password = $body['p_password']      ?? '';
 $k_fname    = trim($body['k_fname']    ?? '');
 $k_lname    = trim($body['k_lname']    ?? '');
 $k_age      = intval($body['k_age']    ?? 0);
+$k_gender   = in_array($body['k_gender'] ?? '', ['boy','girl']) ? $body['k_gender'] : 'boy';
 $k_needs    = (bool)($body['k_needs']  ?? false);
 $k_disease  = trim($body['k_disease']  ?? '');
 
@@ -93,6 +94,7 @@ $new_child = [
     'fname'        => $k_fname,
     'lname'        => $k_lname,
     'age'          => $k_age,
+    'gender'       => $k_gender,
     'special_needs'=> $k_needs,
     'disease'      => $k_disease,
     'username'     => $k_fname . $child_id,

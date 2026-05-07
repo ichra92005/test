@@ -133,6 +133,7 @@ if ($type === 'child') {
         'fname'      => $found['fname'],
         'lname'      => $found['lname'],
         'age'        => $found['age'],
+        'gender'     => $found['gender'] ?? 'boy',
         'username'   => $found['username'],
         'parent_id'  => $found['parent_id'],
         'parent_name'=> $parent ? ($parent['fname'].' '.$parent['lname']) : '',

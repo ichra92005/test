@@ -470,6 +470,21 @@ body{
             </div>
           </div>
 
+          <!-- Gender -->
+          <div class="form-group">
+            <label class="form-label"><i class="bi bi-person-fill"></i> جنس الطفل <span class="req">*</span></label>
+            <div style="display:flex;gap:1rem;margin-top:.4rem">
+              <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;font-weight:700;font-size:.95rem">
+                <input type="radio" name="k_gender" id="k_gender_boy" value="boy" checked style="accent-color:var(--green);width:18px;height:18px">
+                <img src="/assets/pfp/boy.png" alt="" style="width:32px;height:32px;border-radius:50%;object-fit:cover"> ولد
+              </label>
+              <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;font-weight:700;font-size:.95rem">
+                <input type="radio" name="k_gender" id="k_gender_girl" value="girl" style="accent-color:var(--green);width:18px;height:18px">
+                <img src="/assets/pfp/girl.png" alt="" style="width:32px;height:32px;border-radius:50%;object-fit:cover"> بنت
+              </label>
+            </div>
+          </div>
+
           <!-- Age -->
           <div class="form-group">
             <label class="form-label" for="k_age"><i class="bi bi-calendar-fill"></i> عمر الطفل <span class="req">*</span></label>
@@ -670,6 +685,7 @@ function submitRegister(e){
   var kf      = document.getElementById('k_fname').value.trim();
   var kl      = document.getElementById('k_lname').value.trim();
   var age     = parseInt(document.getElementById('k_age').value);
+  var kGender = document.querySelector('input[name="k_gender"]:checked');
   var payload = {
     p_fname   : parentData.fname,
     p_lname   : parentData.lname,
@@ -677,7 +693,8 @@ function submitRegister(e){
     p_password: parentData.password,
     k_fname   : kf,
     k_lname   : kl,
-    k_age     : age
+    k_age     : age,
+    k_gender  : kGender ? kGender.value : 'boy'
   };
 
   fetch('/api/auth_register', {
