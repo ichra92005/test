@@ -55,6 +55,17 @@
                 "77838860"
             ],
             "created_at": "2026-05-07 15:54:42"
+        },
+        {
+            "id": "39036263",
+            "fname": "ICHRAK NOUR ELHOUDA",
+            "lname": "Belkahla",
+            "email": "smillekiller13@gmail.com",
+            "password": "$2y$12$RazFtQMi1ygzqqCOKaoz6eoI2129P00M8nvw8Oe9wjgCMCupNgdzK",
+            "children_ids": [
+                "85901550"
+            ],
+            "created_at": "2026-05-07 21:26:42"
         }
     ]
 }

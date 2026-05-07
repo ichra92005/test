@@ -184,6 +184,13 @@ $makam_user = json_decode($_SESSION['makam_user'] ?? 'null', true);
                 <span>مجتمع الآباء</span>
             </button>
         </nav>
+        
+        <div style="padding: 1.5rem 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+            <button class="nav-item" style="color: var(--danger);" onclick="logoutAdmin()">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>تسجيل الخروج</span>
+            </button>
+        </div>
     </aside>
 
     <!-- Main Content -->
@@ -453,6 +460,11 @@ $makam_user = json_decode($_SESSION['makam_user'] ?? 'null', true);
         // Modals
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        function logoutAdmin() {
+            sessionStorage.removeItem('makam_user');
+            window.location.href = '/login';
+        }
 
         function createAccount() {
             const type = document.getElementById('accType').value;

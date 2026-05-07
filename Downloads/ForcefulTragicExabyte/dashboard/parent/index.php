@@ -691,28 +691,57 @@ require_once __DIR__ . '/../../site/frontend/includes/dashboard/parent/header.ph
         <div class="wh-title"><i class="bi bi-people-fill" style="color:var(--green)"></i> المجتمع (منشورات افتراضية)</div>
         <span class="wh-badge wh-green">اليوم</span>
       </div>
-      <div class="activity-list">
-        <div class="act-item">
-          <div class="act-dot" style="background:var(--green-pale)"><i class="bi bi-star-fill" style="color:var(--green)"></i></div>
-          <div>
-            <div class="act-text"><strong>أحمد — أكمل 5 تحديات اليوم!</strong> تهانينا لأحمد على هذا الإنجاز الرائع 🌟</div>
-            <div class="act-time">منذ 15 دقيقة</div>
+      <div class="activity-list" style="display:flex; flex-direction:column; gap:1.2rem; padding-top:0.5rem;">
+        
+        <!-- Post 1 -->
+        <div class="post-card" style="background:#fff; border:1px solid var(--gray-200); border-radius:12px; padding:1rem;">
+          <div class="post-header" style="display:flex; align-items:center; gap:0.8rem; margin-bottom:0.8rem;">
+            <div style="width:40px; height:40px; background:var(--green-pale); border-radius:50%; display:flex; justify-content:center; align-items:center; color:var(--green); font-size:1.2rem;">
+              <img src="/assets/logo-maqam-transparent.png" alt="شعار مقام" style="width:24px; height:24px; object-fit:contain;" onerror="this.style.display='none'">
+              <i class="bi bi-person-fill" style="display:none;"></i>
+            </div>
+            <div>
+              <div style="font-weight:900; font-size:0.9rem; color:var(--gray-800);">منصة مقام</div>
+              <div style="font-size:0.75rem; color:var(--gray-500);"><i class="bi bi-clock"></i> منذ 15 دقيقة</div>
+            </div>
+          </div>
+          <div class="post-body" style="font-size:0.9rem; color:var(--gray-700); line-height:1.6; margin-bottom:1rem;">
+            تهانينا! 🌟 <strong>أحمد</strong> أكمل 5 تحديات اليوم بنجاح مبهر. شاركوا هذا الإنجاز الرائع!
+          </div>
+          <div class="post-stats" style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--gray-500); padding-bottom:0.5rem; border-bottom:1px solid var(--gray-200); margin-bottom:0.5rem;">
+            <span><i class="bi bi-hand-thumbs-up-fill" style="color:var(--green);"></i> 12</span>
+            <span>3 تعليقات</span>
+          </div>
+          <div class="post-actions" style="display:flex; gap:0.5rem;">
+            <button style="flex:1; padding:0.4rem; background:transparent; border:none; color:var(--gray-600); font-weight:bold; cursor:pointer; border-radius:8px; transition:0.2s;" onmouseover="this.style.background='var(--gray-100)'" onmouseout="this.style.background='transparent'"><i class="bi bi-hand-thumbs-up"></i> أعجبني</button>
+            <button style="flex:1; padding:0.4rem; background:transparent; border:none; color:var(--gray-600); font-weight:bold; cursor:pointer; border-radius:8px; transition:0.2s;" onmouseover="this.style.background='var(--gray-100)'" onmouseout="this.style.background='transparent'"><i class="bi bi-chat"></i> تعليق</button>
           </div>
         </div>
-        <div class="act-item">
-          <div class="act-dot" style="background:var(--green-pale)"><i class="bi bi-trophy-fill" style="color:var(--green)"></i></div>
-          <div>
-            <div class="act-text"><strong>سارة — حصلت على المركز الأول في الرياضيات</strong> مسابقة عباقرة الحساب 💯</div>
-            <div class="act-time">منذ 3 ساعات</div>
+
+        <!-- Post 2 -->
+        <div class="post-card" style="background:#fff; border:1px solid var(--gray-200); border-radius:12px; padding:1rem;">
+          <div class="post-header" style="display:flex; align-items:center; gap:0.8rem; margin-bottom:0.8rem;">
+            <div style="width:40px; height:40px; background:var(--green-pale); border-radius:50%; display:flex; justify-content:center; align-items:center; color:var(--green); font-size:1.2rem;">
+              <img src="/assets/logo-maqam-transparent.png" alt="شعار مقام" style="width:24px; height:24px; object-fit:contain;" onerror="this.style.display='none'">
+            </div>
+            <div>
+              <div style="font-weight:900; font-size:0.9rem; color:var(--gray-800);">منصة مقام</div>
+              <div style="font-size:0.75rem; color:var(--gray-500);"><i class="bi bi-clock"></i> منذ 3 ساعات</div>
+            </div>
+          </div>
+          <div class="post-body" style="font-size:0.9rem; color:var(--gray-700); line-height:1.6; margin-bottom:1rem;">
+            💯 <strong>سارة</strong> حصلت على المركز الأول في مسابقة الرياضيات (عباقرة الحساب).
+          </div>
+          <div class="post-stats" style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--gray-500); padding-bottom:0.5rem; border-bottom:1px solid var(--gray-200); margin-bottom:0.5rem;">
+            <span><i class="bi bi-hand-thumbs-up-fill" style="color:var(--green);"></i> 45</span>
+            <span>10 تعليقات</span>
+          </div>
+          <div class="post-actions" style="display:flex; gap:0.5rem;">
+            <button style="flex:1; padding:0.4rem; background:transparent; border:none; color:var(--green); font-weight:bold; cursor:pointer; border-radius:8px; transition:0.2s; background:var(--green-pale);"><i class="bi bi-hand-thumbs-up-fill"></i> أعجبني</button>
+            <button style="flex:1; padding:0.4rem; background:transparent; border:none; color:var(--gray-600); font-weight:bold; cursor:pointer; border-radius:8px; transition:0.2s;" onmouseover="this.style.background='var(--gray-100)'" onmouseout="this.style.background='transparent'"><i class="bi bi-chat"></i> تعليق</button>
           </div>
         </div>
-        <div class="act-item">
-          <div class="act-dot" style="background:var(--green-pale)"><i class="bi bi-book-fill" style="color:var(--green)"></i></div>
-          <div>
-            <div class="act-text"><strong>علي — أنهى وحدة تاريخ الجزائر</strong> جاهز للمرحلة القادمة! 🇩🇿</div>
-            <div class="act-time">أمس الساعة 18:30</div>
-          </div>
-        </div>
+
       </div>
     </div>
 

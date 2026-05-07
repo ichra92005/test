@@ -277,8 +277,8 @@ if (preg_match('#^/dashboard/student/games/?$#', $cleanUri) && file_exists(__DIR
     ob_end_flush();
     exit;
 }
-if (preg_match('#^/dashboard/student(?:/.*)?$#', $cleanUri) && file_exists(__DIR__ . '/dashboard/student/index.php')) {
-    require_once __DIR__ . '/dashboard/student/index.php';
+if (preg_match('#^/dashboard/student(?:/.*)?$#', $cleanUri) && file_exists(__DIR__ . '/dashboard/student/index.html')) {
+    require_once __DIR__ . '/dashboard/student/index.html';
     ob_end_flush();
     exit;
 }
