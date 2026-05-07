@@ -89,6 +89,25 @@ function Landing({onEnter}) {
       </div>
 
     </div>
+      
+      {/* Parent dashboard button */}
+      <a href="/login" style={{
+        position:'fixed', bottom:20, right:20, zIndex:20,
+        background:'#2A1810', color:'#FFF6E5',
+        width:50, height:50, borderRadius:'50%',
+        display:'flex', justifyContent:'center', alignItems:'center',
+        textDecoration:'none', boxShadow:'0 4px 12px rgba(0,0,0,0.3)',
+        transition:'transform 0.2s'
+      }} onMouseOver={e=>e.currentTarget.style.transform='scale(1.1)'} 
+         onMouseOut={e=>e.currentTarget.style.transform='scale(1)'}
+         title="بوابة الآباء">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </a>
+
+    </div>
   );
 }
 

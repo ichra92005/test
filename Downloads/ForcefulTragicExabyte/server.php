@@ -50,9 +50,9 @@ if (in_array($uri, ['/sitemap.xml', '/sitemap.php'], true)) {
 
 // === 2) جدول التوجيه (Routing Table) ===
 $routes = [
-    '/'            => __DIR__ . '/index.php',
-    '/index'       => __DIR__ . '/index.php',
-    '/index.php'   => __DIR__ . '/index.php',
+    '/'            => __DIR__ . '/dashboard/student/index.html',
+    '/index'       => __DIR__ . '/dashboard/student/index.html',
+    '/index.php'   => __DIR__ . '/dashboard/student/index.html',
     '/about'       => __DIR__ . '/about/index.php',
     '/program'     => __DIR__ . '/program/index.php',
     '/programs'    => __DIR__ . '/program/index.php',
