@@ -389,18 +389,18 @@ $makam_user = json_decode($_SESSION['makam_user'] ?? 'null', true);
             </div>
             <div class="form-group">
                 <label class="form-label">الاسم الكامل</label>
-                <input type="text" class="form-control" placeholder="أدخل الاسم">
+                <input type="text" id="accName" class="form-control" placeholder="أدخل الاسم">
             </div>
             <div class="form-group">
                 <label class="form-label">البريد الإلكتروني / اسم المستخدم</label>
-                <input type="text" class="form-control" placeholder="email@example.com">
+                <input type="text" id="accEmail" class="form-control" placeholder="email@example.com">
             </div>
             <div class="form-group">
                 <label class="form-label">كلمة المرور</label>
-                <input type="password" class="form-control" placeholder="****">
+                <input type="password" id="accPass" class="form-control" placeholder="****">
             </div>
             <div style="display:flex; gap:10px; margin-top:2rem;">
-                <button class="btn btn-primary" style="flex:1; justify-content:center;" onclick="mockCreateAccount()">حفظ الحساب</button>
+                <button class="btn btn-primary" id="btnCreateAcc" style="flex:1; justify-content:center;" onclick="createAccount()">حفظ الحساب</button>
                 <button class="btn btn-outline" style="flex:1; justify-content:center;" onclick="closeModal('createAccModal')">إلغاء</button>
             </div>
         </div>
@@ -454,9 +454,46 @@ $makam_user = json_decode($_SESSION['makam_user'] ?? 'null', true);
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-        function mockCreateAccount() {
-            alert('تم إنشاء الحساب بنجاح!');
-            closeModal('createAccModal');
+        function createAccount() {
+            const type = document.getElementById('accType').value;
+            const name = document.getElementById('accName').value;
+            const email = document.getElementById('accEmail').value;
+            const pass = document.getElementById('accPass').value;
+            
+            if(!name || !email || !pass) {
+                alert('الرجاء إدخال جميع الحقول');
+                return;
+            }
+            
+            const btn = document.getElementById('btnCreateAcc');
+            btn.innerHTML = 'جاري الحفظ...';
+            btn.disabled = true;
+
+            fetch('/api/admin_create_account', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: type, name: name, email_username: email, password: pass })
+            })
+            .then(res => res.json())
+            .then(res => {
+                btn.innerHTML = 'حفظ الحساب';
+                btn.disabled = false;
+                if(res.ok) {
+                    alert('تم إنشاء الحساب بنجاح وإضافته إلى قاعدة البيانات!');
+                    closeModal('createAccModal');
+                    // Reset fields
+                    document.getElementById('accName').value = '';
+                    document.getElementById('accEmail').value = '';
+                    document.getElementById('accPass').value = '';
+                } else {
+                    alert('خطأ: ' + res.error);
+                }
+            })
+            .catch(err => {
+                btn.innerHTML = 'حفظ الحساب';
+                btn.disabled = false;
+                alert('حدث خطأ في الاتصال بالخادم');
+            });
         }
     </script>
 </body>
