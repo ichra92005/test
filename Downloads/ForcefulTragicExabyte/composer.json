@@ -1,0 +1,19 @@
+{
+    "name": "maqam/kids-platform",
+    "description": "منصة مقام التعليمية للأطفال",
+    "type": "project",
+    "require": {
+        "php": ">=8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Maqam\\": "src/php/"
+        },
+        "files": [
+            "includes/functions.php"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}

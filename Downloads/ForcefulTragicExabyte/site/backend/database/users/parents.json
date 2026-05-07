@@ -1,0 +1,60 @@
+{
+    "parents": [
+        {
+            "id": "87753922",
+            "fname": "أحمد",
+            "lname": "بن علي",
+            "email": "ahmed@test.com",
+            "password": "$2y$10$b0wyhVg39znTNBWMlS4ziu3E6erNQKfOW2OGV4qJ\/LDOacIX.Rcl.",
+            "children_ids": [
+                "75792408"
+            ],
+            "created_at": "2026-05-07 06:10:47"
+        },
+        {
+            "id": "78167104",
+            "fname": "سارة",
+            "lname": "مقراني",
+            "email": "sara@test.com",
+            "password": "$2y$10$7J1CTiq9.6Ogjc4rdbNlbOXdhXvS.EhnpEON8yIHSF87pWZWBMDAu",
+            "children_ids": [
+                "48576171"
+            ],
+            "created_at": "2026-05-07 06:11:05"
+        },
+        {
+            "id": "12264297",
+            "fname": "الياس محمد الهادي",
+            "lname": "عباس",
+            "email": "kashafati.platform@gmail.com",
+            "password": "$2y$10$CFTt9Ww9xpp49bRscr6J\/.1xiMbr1qp013xXUX.s9xzcPjvhRKl2O",
+            "children_ids": [
+                "63704404"
+            ],
+            "created_at": "2026-05-07 06:11:21"
+        },
+        {
+            "id": "12345678",
+            "fname": "علي",
+            "lname": "بوعزيز",
+            "email": "test@test.com",
+            "password": "$2y$10$JoKTz1lu1MOzlKZC8FpNyuegI9az3V3r2YaDUQF1jK.5tAsQZ7\/jK",
+            "children_ids": [
+                "87654321",
+                "86492407"
+            ],
+            "created_at": "2026-05-07 11:29:35"
+        },
+        {
+            "id": "46329717",
+            "fname": "dqdqsdq",
+            "lname": "azdqsd",
+            "email": "kashafati.platforsm@gmail.com",
+            "password": "$2y$10$JxzFru.JQ0t9vkLS72JvAuctFSaz4s\/jUL.hKbsroXB4EXpLZhaFW",
+            "children_ids": [
+                "77838860"
+            ],
+            "created_at": "2026-05-07 15:54:42"
+        }
+    ]
+}

@@ -1,0 +1,98 @@
+{
+    "progress": {
+        "87654321": {
+            "done_lessons": 10,
+            "streak": 5,
+            "status": "offline",
+            "last_activity": "2026-05-07 10:20:00",
+            "time_today_minutes": 32,
+            "weekly_minutes": [15, 40, 20, 55, 30, 45, 10],
+            "badges": ["🌱", "⭐"],
+            "subjects": [
+                {"id": "math",    "done": 3},
+                {"id": "arabic",  "done": 2},
+                {"id": "science", "done": 2},
+                {"id": "history", "done": 1},
+                {"id": "french",  "done": 1},
+                {"id": "art",     "done": 1}
+            ],
+            "activities": [
+                {"icon": "bi-check-circle-fill", "bg": "#E8F5EE", "ic": "#2D7A45", "title": "أكمل درس «الجزائر العاصمة»", "time": "اليوم · منذ ٣٢ دقيقة"},
+                {"icon": "bi-star-fill",          "bg": "#FFF9E6", "ic": "#D4A520", "title": "حصل على شارة النجم الصاعد ⭐", "time": "أمس · ٤:٣٠ م"},
+                {"icon": "bi-play-circle-fill",   "bg": "#EFF6FF", "ic": "#2563EB", "title": "بدأ وحدة «الرياضيات»",         "time": "٣ أيام · ٦:١٥ م"},
+                {"icon": "bi-shield-check",       "bg": "#E8F5EE", "ic": "#2D7A45", "title": "أنجز تحدي الأسبوع",            "time": "٥ أيام · ١١:٠٠ ص"}
+            ],
+            "streak_days": {}
+        },
+        "86492407": {
+            "done_lessons": 20,
+            "streak": 12,
+            "status": "offline",
+            "last_activity": "2026-05-07 07:45:00",
+            "time_today_minutes": 85,
+            "weekly_minutes": [60, 80, 45, 90, 70, 85, 55],
+            "badges": ["🌱", "⭐", "🏅"],
+            "subjects": [
+                {"id": "math",    "done": 5},
+                {"id": "arabic",  "done": 4},
+                {"id": "science", "done": 3},
+                {"id": "history", "done": 4},
+                {"id": "french",  "done": 2},
+                {"id": "art",     "done": 2}
+            ],
+            "activities": [
+                {"icon": "bi-check-circle-fill", "bg": "#E8F5EE", "ic": "#2D7A45", "title": "أكملت وحدة «اللغة العربية» كاملة", "time": "اليوم · منذ ٣ ساعات"},
+                {"icon": "bi-trophy-fill",        "bg": "#FFF9E6", "ic": "#D4A520", "title": "حصلت على شارة المتعلم المثابر 🏅",  "time": "أمس · ٩:٠٠ ص"},
+                {"icon": "bi-fire",               "bg": "#FFF3E8", "ic": "#E07824", "title": "سلسلة ١٢ يوم متواصل!",              "time": "٢ أيام · ٨:٣٠ ص"},
+                {"icon": "bi-play-circle-fill",   "bg": "#EFF6FF", "ic": "#2563EB", "title": "بدأت وحدة «الفرنسية»",              "time": "٤ أيام · ٥:٤٥ م"}
+            ],
+            "streak_days": {}
+        },
+        "75792408": {
+            "done_lessons": 3,
+            "streak": 2,
+            "status": "offline",
+            "last_activity": "2026-05-06 15:30:00",
+            "time_today_minutes": 18,
+            "weekly_minutes": [0, 18, 25, 0, 30, 0, 18],
+            "badges": ["🌱"],
+            "subjects": [
+                {"id": "math",    "done": 2},
+                {"id": "arabic",  "done": 1},
+                {"id": "science", "done": 0},
+                {"id": "history", "done": 0},
+                {"id": "french",  "done": 0},
+                {"id": "art",     "done": 0}
+            ],
+            "activities": [
+                {"icon": "bi-check-circle-fill", "bg": "#E8F5EE", "ic": "#2D7A45", "title": "أكمل درس «الجمع والطرح»",    "time": "أمس · ٣:٣٠ م"},
+                {"icon": "bi-play-circle-fill",  "bg": "#EFF6FF", "ic": "#2563EB", "title": "بدأ وحدة «الرياضيات»",        "time": "٣ أيام · ٦:٠٠ م"}
+            ],
+            "streak_days": {}
+        },
+        "48576171": {
+            "done_lessons": 0,
+            "streak": 0,
+            "status": "offline",
+            "last_activity": null,
+            "time_today_minutes": 0,
+            "weekly_minutes": [0, 0, 0, 0, 0, 0, 0],
+            "badges": ["🌱"],
+            "subjects": [],
+            "activities": [],
+            "streak_days": {}
+        },
+        "63704404": {
+            "done_lessons": 0,
+            "streak": 0,
+            "status": "offline",
+            "last_activity": null,
+            "time_today_minutes": 0,
+            "weekly_minutes": [0, 0, 0, 0, 0, 0, 0],
+            "badges": ["🌱"],
+            "subjects": [],
+            "activities": [],
+            "streak_days": {}
+        }
+    }
+}

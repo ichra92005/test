@@ -1,0 +1,52 @@
+{
+    "students": {
+        "default": {
+            "name": "أمين",
+            "total_xp": 50,
+            "regions": {
+                "1": {
+                    "unlocked": true,
+                    "quiz": {
+                        "completed": true,
+                        "score": 8,
+                        "total": 8,
+                        "xp": 50,
+                        "best_score": 8,
+                        "attempts": 6,
+                        "last_at": "2026-05-07 07:41:04"
+                    },
+                    "tf": {
+                        "completed": false,
+                        "score": 0,
+                        "total": 0,
+                        "xp": 0
+                    },
+                    "fill": {
+                        "completed": false,
+                        "score": 0,
+                        "total": 0,
+                        "xp": 0
+                    },
+                    "memory": {
+                        "completed": false,
+                        "score": 0,
+                        "total": 0,
+                        "xp": 0
+                    }
+                },
+                "2": {
+                    "unlocked": false
+                },
+                "3": {
+                    "unlocked": false
+                },
+                "4": {
+                    "unlocked": false
+                },
+                "5": {
+                    "unlocked": false
+                }
+            }
+        }
+    }
+}
