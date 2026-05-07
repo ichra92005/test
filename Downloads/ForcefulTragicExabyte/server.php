@@ -175,6 +175,11 @@ if (preg_match('#^/admin(?:/.*)?$#', $cleanUri) && file_exists(__DIR__ . '/admin
     ob_end_flush();
     exit;
 }
+if (preg_match('#^/dashboard/profiles/?$#', $cleanUri) && file_exists(__DIR__ . '/dashboard/profiles/index.php')) {
+    require_once __DIR__ . '/dashboard/profiles/index.php';
+    ob_end_flush();
+    exit;
+}
 if (preg_match('#^/dashboard/profile/edit/?$#', $cleanUri) && file_exists(__DIR__ . '/dashboard/profile/edit/index.php')) {
     require_once __DIR__ . '/dashboard/profile/edit/index.php';
     ob_end_flush();

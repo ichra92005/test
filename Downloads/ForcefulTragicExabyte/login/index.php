@@ -620,7 +620,11 @@ function submitParent(e){
     if(res.ok){
       showToast('أهلاً ' + res.data.fname + '! جاري تحويلك...', 'green');
       sessionStorage.setItem('makam_user', JSON.stringify(res.data));
-      setTimeout(function(){ window.location.href = '/dashboard/parent'; }, 1200);
+      if (res.data.type === 'admin') {
+        setTimeout(function(){ window.location.href = '/dashboard/admin/index.php'; }, 1200);
+      } else {
+        setTimeout(function(){ window.location.href = '/dashboard/profiles'; }, 1200);
+      }
     } else {
       showToast(res.error || 'خطأ في تسجيل الدخول', 'orange');
     }

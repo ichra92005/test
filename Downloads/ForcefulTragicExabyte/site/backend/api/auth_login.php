@@ -36,6 +36,17 @@ $children_db = load_db(DB_CHILDREN);
 $parents_list  = $parents_db['parents']   ?? [];
 $children_list = $children_db['children'] ?? [];
 
+/* ─── ADMIN LOGIN ─── */
+if ($type === 'parent' && $login === 'admin@admin' && $password === 'admin@admin') {
+    ok([
+        'type'  => 'admin',
+        'id'    => 'admin',
+        'fname' => 'مدير',
+        'lname' => 'النظام',
+        'email' => 'admin@admin'
+    ]);
+}
+
 /* ─── PARENT LOGIN ─── */
 if ($type === 'parent') {
     $found = null;

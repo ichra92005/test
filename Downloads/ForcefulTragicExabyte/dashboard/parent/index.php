@@ -15,20 +15,19 @@ require_once __DIR__ . '/../../site/frontend/includes/dashboard/parent/header.ph
 
 /* ── Page background ── */
 .dash-content {
-  background: linear-gradient(160deg, #FFF8F0 0%, #FFFCF5 35%, #F2FAF5 70%, #F5F8FF 100%);
+  background: #f4fbf7;
   min-height: 100vh;
   padding: 2rem 2rem 3rem;
 }
 
-/* ── Blob decorations ── */
+/* ── Blob decorations (simplified to just one soft green glow) ── */
 .page-blobs { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
 .pg-blob {
   position: absolute; border-radius: 50%;
-  filter: blur(80px); opacity: .08;
+  filter: blur(80px); opacity: .15;
 }
-.pg-blob-1 { width: 500px; height: 500px; background: var(--orange); top: -150px; right: -100px; animation: blobDrift 12s ease-in-out infinite; }
-.pg-blob-2 { width: 380px; height: 380px; background: var(--green); bottom: 100px; left: -80px; animation: blobDrift 15s ease-in-out 3s infinite reverse; }
-.pg-blob-3 { width: 260px; height: 260px; background: var(--gold); top: 40%; right: 30%; animation: blobDrift 9s ease-in-out 1.5s infinite; }
+.pg-blob-1 { width: 500px; height: 500px; background: var(--green); top: -150px; right: -100px; animation: blobDrift 12s ease-in-out infinite; }
+
 @keyframes blobDrift { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-20px) scale(1.05)} }
 
 /* ── Content wrapper (above blobs) ── */
@@ -36,27 +35,22 @@ require_once __DIR__ . '/../../site/frontend/includes/dashboard/parent/header.ph
 
 /* ══ WELCOME HERO BANNER ══ */
 .wb-hero {
-  background: linear-gradient(135deg, #111C15 0%, #1E3A28 45%, #0F2218 100%);
+  background: #ffffff;
+  border: 1px solid rgba(44, 122, 81, 0.1);
   border-radius: 24px;
   padding: 0;
   margin-bottom: 2rem;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(17,28,21,.35), 0 4px 16px rgba(0,0,0,.12);
+  box-shadow: 0 10px 40px rgba(44, 122, 81, 0.05);
   position: relative;
   animation: slideDown .6s cubic-bezier(.4,0,.2,1);
 }
 @keyframes slideDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:none} }
 
-/* Hero blobs inside banner */
-.wb-blob { position: absolute; border-radius: 50%; pointer-events: none; filter: blur(50px); }
-.wbb-1 { width: 280px; height: 280px; background: rgba(45,122,69,.3); top: -80px; left: -60px; }
-.wbb-2 { width: 200px; height: 200px; background: rgba(232,184,48,.2); bottom: -60px; right: 80px; }
-.wbb-3 { width: 140px; height: 140px; background: rgba(224,120,36,.18); top: 20px; right: -30px; }
-
 /* Pattern overlay */
 .wb-pattern {
-  position: absolute; inset: 0; opacity: .04;
-  background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-rule='evenodd'%3E%3Ccircle cx='20' cy='20' r='3'/%3E%3C/g%3E%3C/svg%3E");
+  position: absolute; inset: 0; opacity: .02;
+  background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%232c7a51' fill-rule='evenodd'%3E%3Ccircle cx='20' cy='20' r='3'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 .wb-inner {
@@ -68,38 +62,37 @@ require_once __DIR__ . '/../../site/frontend/includes/dashboard/parent/header.ph
 .wb-left {}
 .wb-flag-tag {
   display: inline-flex; align-items: center; gap: .5rem;
-  background: rgba(232,184,48,.18); border: 1.5px solid rgba(232,184,48,.3);
-  color: var(--gold); font-weight: 800; font-size: .8rem;
+  background: var(--green-pale); border: 1.5px solid rgba(44, 122, 81, 0.2);
+  color: var(--green); font-weight: 800; font-size: .8rem;
   padding: .3rem 1rem; border-radius: 50px;
   margin-bottom: 1rem;
 }
 .wb-flag-tag i { font-size: .9rem; }
-.wb-greeting-sub { font-size: .82rem; color: rgba(255,255,255,.45); font-weight: 700; margin-bottom: .3rem; display: flex; align-items: center; gap: .4rem; }
-.wb-greeting-sub i { color: var(--gold); }
+.wb-greeting-sub { font-size: .82rem; color: #555; font-weight: 700; margin-bottom: .3rem; display: flex; align-items: center; gap: .4rem; }
+.wb-greeting-sub i { color: var(--green); }
 .wb-name {
-  font-size: 2rem; font-weight: 900; color: #fff; line-height: 1.15; margin-bottom: .5rem;
+  font-size: 2rem; font-weight: 900; color: var(--green); line-height: 1.15; margin-bottom: .5rem;
 }
 .wb-name em {
-  background: linear-gradient(135deg, var(--gold), #F59E0B);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  color: #236140;
   font-style: normal;
 }
-.wb-tagline { font-size: .88rem; color: rgba(255,255,255,.5); font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: .5rem; }
-.wb-tagline i { color: var(--green3); }
+.wb-tagline { font-size: .88rem; color: #666; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: .5rem; }
+.wb-tagline i { color: var(--green); }
 
 .wb-quick-stats {
   display: flex; gap: 1rem; flex-wrap: wrap;
 }
 .wqs-item {
-  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+  background: var(--bg-color); border: 1px solid var(--gray-200);
   border-radius: 14px; padding: .7rem 1.1rem;
   display: flex; align-items: center; gap: .65rem;
   transition: all .25s ease; cursor: default;
 }
-.wqs-item:hover { background: rgba(255,255,255,.12); transform: translateY(-2px); }
+.wqs-item:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 .wqs-icon { font-size: 1.2rem; }
-.wqs-val { font-size: 1.1rem; font-weight: 900; color: #fff; line-height: 1; }
-.wqs-lbl { font-size: .7rem; font-weight: 700; color: rgba(255,255,255,.45); margin-top: .1rem; }
+.wqs-val { font-size: 1.1rem; font-weight: 900; color: #333; line-height: 1; }
+.wqs-lbl { font-size: .7rem; font-weight: 700; color: #777; margin-top: .1rem; }
 
 .wb-right {
   display: flex; flex-direction: column; align-items: flex-end; gap: 1rem;
@@ -112,26 +105,26 @@ require_once __DIR__ . '/../../site/frontend/includes/dashboard/parent/header.ph
   cursor: pointer; transition: all .25s ease; border: none;
   white-space: nowrap;
 }
-.wbb-gold { background: linear-gradient(135deg, var(--gold), #F59E0B); color: #333; box-shadow: 0 4px 18px rgba(232,184,48,.35); }
-.wbb-gold:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(232,184,48,.45); }
-.wbb-ghost { background: rgba(255,255,255,.1); color: rgba(255,255,255,.8); border: 1.5px solid rgba(255,255,255,.18); }
-.wbb-ghost:hover { background: rgba(255,255,255,.18); }
+.wbb-gold { background: var(--green); color: #fff; box-shadow: 0 4px 18px rgba(44, 122, 81, .25); }
+.wbb-gold:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(44, 122, 81, .35); background: #236140; }
+.wbb-ghost { background: #fff; color: var(--green); border: 1.5px solid var(--green); }
+.wbb-ghost:hover { background: var(--green-pale); }
 
 /* Welcome banner bottom strip */
 .wb-strip {
-  background: rgba(255,255,255,.04); border-top: 1px solid rgba(255,255,255,.07);
+  background: var(--green-pale); border-top: 1px solid rgba(44,122,81,.1);
   padding: .75rem 2.5rem;
   display: flex; align-items: center; gap: 2rem;
   position: relative; z-index: 2; flex-wrap: wrap;
 }
 .wbs-item {
   display: flex; align-items: center; gap: .45rem;
-  font-size: .78rem; font-weight: 700; color: rgba(255,255,255,.5);
+  font-size: .78rem; font-weight: 700; color: var(--green);
 }
 .wbs-item i { font-size: .85rem; }
-.wbs-item.green i { color: var(--green3); }
-.wbs-item.gold i { color: var(--gold); }
-.wbs-item.orange i { color: var(--orange); }
+.wbs-item.green i { color: var(--green); }
+.wbs-item.gold i { color: var(--green); }
+.wbs-item.orange i { color: var(--green); }
 
 /* ══ STATS BAND ══ */
 .stats-band {
@@ -511,10 +504,10 @@ require_once __DIR__ . '/../../site/frontend/includes/dashboard/parent/header.ph
 }
 .pw-deco { position: absolute; border-radius: 50%; pointer-events: none; }
 .pw-deco1 { width: 120px; height: 120px; background: rgba(255,255,255,.04); top: -35px; left: -35px; }
-.pw-deco2 { width: 80px; height: 80px; background: rgba(232,184,48,.08); bottom: -25px; right: -15px; }
+.pw-deco2 { width: 80px; height: 80px; background: rgba(44,122,81,.08); bottom: -25px; right: -15px; }
 .pw-badge {
   display: inline-flex; align-items: center; gap: .35rem;
-  background: var(--gold); color: #333; font-size: .7rem; font-weight: 900;
+  background: var(--green); color: #fff; font-size: .7rem; font-weight: 900;
   padding: .22rem .7rem; border-radius: 50px; margin-bottom: .8rem;
 }
 .pw-title { font-size: 1rem; font-weight: 900; color: #fff; margin-bottom: .5rem; line-height: 1.3; position: relative; z-index: 1; }
@@ -522,17 +515,17 @@ require_once __DIR__ . '/../../site/frontend/includes/dashboard/parent/header.ph
 .pw-quote {
   background: rgba(255,255,255,.07); border-radius: 10px;
   padding: .6rem .85rem; font-size: .75rem; font-style: italic;
-  color: rgba(255,255,255,.72); border-right: 3px solid var(--gold);
+  color: rgba(255,255,255,.72); border-right: 3px solid var(--green);
   margin-bottom: .9rem; line-height: 1.6; position: relative; z-index: 1;
 }
 .pw-btn {
   display: flex; align-items: center; justify-content: center; gap: .45rem;
-  background: linear-gradient(135deg, var(--gold), #F59E0B);
-  color: #333; border: none; border-radius: 12px;
+  background: var(--green);
+  color: #fff; border: none; border-radius: 12px;
   padding: .65rem; font-family: var(--font); font-size: .84rem; font-weight: 900;
   cursor: pointer; width: 100%; transition: all .25s ease; position: relative; z-index: 1;
 }
-.pw-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(232,184,48,.4); }
+.pw-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(44,122,81,.4); background: #236140; }
 
 /* ══ TOAST ══ */
 .toast-wrap { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: .5rem; pointer-events: none; }
@@ -574,9 +567,6 @@ require_once __DIR__ . '/../../site/frontend/includes/dashboard/parent/header.ph
 
 <!-- ════════ WELCOME HERO ════════ -->
 <div class="wb-hero">
-  <div class="wb-blob wbb-1"></div>
-  <div class="wb-blob wbb-2"></div>
-  <div class="wb-blob wbb-3"></div>
   <div class="wb-pattern"></div>
 
   <div class="wb-inner">
@@ -695,31 +685,31 @@ require_once __DIR__ . '/../../site/frontend/includes/dashboard/parent/header.ph
       </div>
     </div>
 
-    <!-- Recent Activity -->
+    <!-- Community Section / Recent Activity -->
     <div class="widget">
       <div class="widget-head">
-        <div class="wh-title"><i class="bi bi-clock-history" style="color:var(--blue)"></i> آخر النشاطات</div>
+        <div class="wh-title"><i class="bi bi-people-fill" style="color:var(--green)"></i> المجتمع (منشورات افتراضية)</div>
         <span class="wh-badge wh-green">اليوم</span>
       </div>
       <div class="activity-list">
         <div class="act-item">
           <div class="act-dot" style="background:var(--green-pale)"><i class="bi bi-star-fill" style="color:var(--green)"></i></div>
           <div>
-            <div class="act-text"><strong>أمين — أكمل درساً جديداً</strong> وحدة الجزائر · الدرس الأول</div>
-            <div class="act-time">منذ 30 دقيقة</div>
+            <div class="act-text"><strong>أحمد — أكمل 5 تحديات اليوم!</strong> تهانينا لأحمد على هذا الإنجاز الرائع 🌟</div>
+            <div class="act-time">منذ 15 دقيقة</div>
           </div>
         </div>
         <div class="act-item">
-          <div class="act-dot" style="background:var(--orange-pale)"><i class="bi bi-trophy-fill" style="color:var(--orange)"></i></div>
+          <div class="act-dot" style="background:var(--green-pale)"><i class="bi bi-trophy-fill" style="color:var(--green)"></i></div>
           <div>
-            <div class="act-text"><strong>سارة — حصلت على شارة جديدة</strong> شارة "النجم الصاعد"</div>
+            <div class="act-text"><strong>سارة — حصلت على المركز الأول في الرياضيات</strong> مسابقة عباقرة الحساب 💯</div>
             <div class="act-time">منذ 3 ساعات</div>
           </div>
         </div>
         <div class="act-item">
-          <div class="act-dot" style="background:#F3F0FF"><i class="bi bi-lightning-fill" style="color:#7C3AED"></i></div>
+          <div class="act-dot" style="background:var(--green-pale)"><i class="bi bi-book-fill" style="color:var(--green)"></i></div>
           <div>
-            <div class="act-text"><strong>سارة — أتمت وحدة بشار</strong> 8/8 دروس مكتملة ✓</div>
+            <div class="act-text"><strong>علي — أنهى وحدة تاريخ الجزائر</strong> جاهز للمرحلة القادمة! 🇩🇿</div>
             <div class="act-time">أمس الساعة 18:30</div>
           </div>
         </div>
