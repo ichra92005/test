@@ -1,3 +1,4 @@
+import React from 'react';
 // Game section — map → level path → game → reveal
 const { useState: useS_g, useEffect: useE_g } = React;
 
@@ -66,7 +67,6 @@ function SectionGame({ctx}) {
   };
   const onWin = (s) => {
     setScore(s);
-    if (ctx?.addPoints) ctx.addPoints(s);
     // mark this level done if it's the next one
     setProgress(p => {
       const cur = p[picked.id] ?? 0;
@@ -124,10 +124,19 @@ function MapPhase({onPick, progress}) {
           <h1 style={{fontFamily:'var(--font-display)', fontSize:44, fontWeight:700}}>اختر منطقة</h1>
           <p style={{fontSize:16, color:'#7a5538', marginTop:6}}>كل منطقة فيها <b>4 مستويات</b> لتجمع بطاقتها</p>
         </div>
-        <div style={{display:'flex', gap:10, flexWrap:'wrap'}}>
-          <Legend color="var(--c-mint)" label="مكتمل ✓"/>
-          <Legend color="var(--c-clay)" label="متاح"/>
-          <Legend color="#D4B89A" label="مقفل"/>
+        <div style={{display:'flex', flexWrap:'wrap', gap:10, alignItems:'center'}}>
+          <div style={{display:'flex', gap:10, flexWrap:'wrap'}}>
+            <Legend color="var(--c-mint)" label="مكتمل ✓"/>
+            <Legend color="var(--c-clay)" label="متاح"/>
+            <Legend color="#D4B89A" label="مقفل"/>
+          </div>
+          <button onClick={()=>ctx.setSection('passport')} className="squish" style={{
+            background:'#8B4513', color:'#FFF', padding:'10px 18px', borderRadius:20,
+            display:'flex', gap:8, alignItems:'center', border:'3px solid #5D2E0A',
+            boxShadow:'0 4px 0 #5D2E0A', fontSize:14, fontWeight:800, marginRight:10
+          }}>
+            <Icon.Cards size={20}/> جواز السفر
+          </button>
         </div>
       </div>
 
@@ -262,11 +271,7 @@ function BigMap({onPick, progress}) {
 // ---------- LEVELS PHASE (Duolingo-style winding path) ----------
 function LevelsPhase({region, done, onPick}) {
   const [showVideo, setShowVideo] = useS_g(false);
-  const videoByRegion = {
-    algiers: 'assets/STORIES/IMG_9697.MP4',
-    oran:    'assets/STORIES/oran.MP4',
-  };
-  const storyVideoSrc = videoByRegion[region.id] || 'assets/STORIES/IMG_9697.MP4';
+  const storyVideoSrc = 'assets/STORIES/IMG_9697.MOV';
   // Positions for 4 level pins along a winding path (% of container)
   const positions = [
     {x:25, y:82},
@@ -570,33 +575,14 @@ function GameModal({region, levelNum, ageBand='7-10', onWin, onClose}) {
       {q:'ما الدرس الجميل من قصة 1 نوفمبر للأطفال؟', opts:['حب الوطن والتعاون والشجاعة','الكسل طوال اليوم','إهمال المدرسة','عدم مساعدة الآخرين'], answer:0},
     ],
     '7-10': [
-      {q:'في أي تاريخ انطلقت الثورة الجزائرية؟', opts:['1 نوفمبر 1954','5 جويلية 1962','8 ماي 1945','1 جانفي 1960'], answer:0},
-      {q:'ماذا نحتفل في 5 جويلية من كل سنة؟', opts:['استقلال الجزائر','يوم الرياضة','عيد المعلم','يوم البيئة'], answer:0},
-      {q:'من هو لربي بن مهيدي؟', opts:['بطل ثوري جزائري شجاع','لاعب كرة قدم مشهور','رئيس وزراء قديم','رسام معروف'], answer:0},
+      {q:'ماذا يرمز تاريخ 1 نوفمبر 1954 في الجزائر؟', opts:['انطلاق الثورة التحريرية','افتتاح مدرسة جديدة','بداية موسم الصيف','يوم رياضي'], answer:0},
+      {q:'ما الهدف الرئيسي من ثورة 1 نوفمبر؟', opts:['استرجاع الحرية والاستقلال','زيادة العطل المدرسية','تنظيم مهرجان','بناء ملعب'], answer:0},
+      {q:'أي قيمة نتعلمها من أبطال 1 نوفمبر؟', opts:['الصبر والشجاعة وحب الوطن','التكاسل','الأنانية','الفوضى'], answer:0},
     ],
     '11+': [
       {q:'أي وصف أدقّ لـ1 نوفمبر 1954؟', opts:['بداية الكفاح المسلح المنظم للتحرر الوطني','اتفاقية سلام نهائية','انتخابات محلية','إعلان إصلاح اقتصادي'], answer:0},
-      {q:'لماذا يُعدّ بيان أول نوفمبر وثيقة محورية في تاريخ الجزائر؟', opts:['لأنه حدّد أهداف الثورة السياسية والوطنية','لأنه كان نشيدًا وطنيًا فقط','لأنه قانون رياضي','لأنه وثيقة إدارية عادية'], answer:0},
-      {q:'ما العلاقة بين ثورة 1 نوفمبر واستقلال 1962؟', opts:['الثورة هي التي فتحت الطريق نحو الاستقلال','لا علاقة بينهما','الاستقلال سبق الثورة','الثورة أوقفت المفاوضات'], answer:0},
-    ],
-  };
-  const COUNT_ROUNDS_BY_BAND = {
-    '3-6': [
-      {q:'عدّ معنا: 2 + 1 = ؟', opts:['2','3','4','5'], answer:1},
-      {q:'كم نجمة هنا؟ ⭐⭐⭐', opts:['2','3','4','5'], answer:1},
-      {q:'5 - 2 = ؟', opts:['1','2','3','4'], answer:2},
-    ],
-    '7-10': [
-      {q:'4 × 5 = ؟', opts:['16','20','24','28'], answer:1},
-      {q:'36 ÷ 6 = ؟', opts:['5','6','7','8'], answer:1},
-      {q:'8 × 3 = ؟', opts:['21','24','27','30'], answer:1},
-      {q:'25 + 17 = ؟', opts:['40','42','44','46'], answer:1},
-    ],
-    '11+': [
-      {q:'12 × 11 = ؟', opts:['121','132','142','144'], answer:1},
-      {q:'144 ÷ 12 = ؟', opts:['10','11','12','13'], answer:2},
-      {q:'3 × (9 + 6) = ؟', opts:['40','42','45','48'], answer:2},
-      {q:'(40 + 20) ÷ 5 = ؟', opts:['10','11','12','14'], answer:2},
+      {q:'لماذا يُعدّ بيان أول نوفمبر وثيقة محورية؟', opts:['لأنه حدّد أهداف الثورة السياسية والوطنية','لأنه كان نشيدًا فقط','لأنه قانونًا رياضيًا','لأنه وثيقة مدرسية بسيطة'], answer:0},
+      {q:'أي نتيجة تاريخية ارتبطت بمسار بدأ في 1 نوفمبر؟', opts:['استقلال الجزائر سنة 1962','إلغاء التعليم','انتهاء التاريخ الوطني','بداية الاستعمار'], answer:0},
     ],
   };
   const ROUNDS_BY_KIND = {
@@ -606,7 +592,11 @@ function GameModal({region, levelNum, ageBand='7-10', onWin, onClose}) {
       {q:`أين تقع ${region.name}؟`, opts:['الجزائر','فرنسا','تركيا','مصر'], answer:0},
       {q:'أيّ هذه أكلة جزائرية؟', opts:['كسرة','سوشي','بيتزا','تاكو'], answer:0},
     ],
-    count: COUNT_ROUNDS_BY_BAND[ageBand] || COUNT_ROUNDS_BY_BAND['7-10'],
+    count: [
+      {q:'كم منطقة على الخريطة؟', opts:['4','6','8','10'], answer:1},
+      {q:'2 + 3 = ؟', opts:['4','5','6','7'], answer:1},
+      {q:'7 - 4 = ؟', opts:['1','2','3','4'], answer:2},
+    ],
     final: [
       {q:`اختر بطاقة ${region.name}`, opts:[region.name,'بطريق','بيتزا','صاروخ'], answer:0},
       {q:'كيف نقول مرحبا بالعربية؟', opts:['Hello','مرحبا','Bonjour','Hola'], answer:1},

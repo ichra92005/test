@@ -1,20 +1,11 @@
+import React from 'react';
 // What happened today section — kid-friendly Algerian history by date
 function SectionTodayHistory({ctx}) {
-  const { useState: useS_th } = React;
-  const [showVideo, setShowVideo] = useS_th(false);
   const now = new Date();
   const key = `${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
   const fallback = TODAY_HISTORY_EVENTS['05-08'];
   const event = TODAY_HISTORY_EVENTS[key] || fallback;
   const ageBand = ctx?.profile?.ageBand || '7-10';
-
-  const eventVideos = {
-    '11-01': 'assets/STORIES/IMG_9697.MP4',
-    '05-08': 'assets/STORIES/IMG_9697.MP4',
-    '12-11': 'assets/STORIES/oran.MP4',
-    '07-05': 'assets/STORIES/IMG_9697.MP4',
-  };
-  const videoSrc = eventVideos[key] || 'assets/STORIES/IMG_9697.MP4';
 
   const eventByBand = {
     short: {
@@ -73,44 +64,6 @@ function SectionTodayHistory({ctx}) {
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Video Section */}
-      <div style={{
-        marginTop:18, background:'#1A0A2E', borderRadius:24,
-        border:'3px solid #BB6BD9', overflow:'hidden'
-      }}>
-        <button
-          onClick={()=>setShowVideo(v=>!v)}
-          style={{
-            width:'100%', padding:'18px 24px',
-            background:'linear-gradient(135deg, #6B21A8, #9B51E0)',
-            color:'#FFF6E5', border:'none', cursor:'pointer',
-            display:'flex', gap:12, alignItems:'center', justifyContent:'center'
-          }}
-        >
-          <Icon.Play size={22} color="#FFF6E5"/>
-          <span style={{fontFamily:'var(--font-display)', fontSize:20, fontWeight:700}}>
-            {showVideo ? 'إخفاء الفيديو' : 'شاهد فيديو الحدث'}
-          </span>
-        </button>
-
-        {showVideo && (
-          <div style={{padding:'16px', background:'rgba(0,0,0,.3)'}}>
-            <div style={{fontSize:13, color:'rgba(255,255,255,.7)', textAlign:'center', marginBottom:10}}>
-              الراوي يحكي لك عن {event.title}
-            </div>
-            <video
-              src={videoSrc}
-              controls
-              preload="metadata"
-              style={{
-                width:'100%', borderRadius:14, background:'#000',
-                maxHeight:360, display:'block'
-              }}
-            />
-          </div>
-        )}
       </div>
     </div>
   );

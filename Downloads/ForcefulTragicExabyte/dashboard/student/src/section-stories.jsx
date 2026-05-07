@@ -1,3 +1,4 @@
+import React from 'react';
 // Stories section — choose read/listen, AI reader modal
 const { useState: useS_s } = React;
 function StoryCover({story, size=72}) {
@@ -113,6 +114,12 @@ function StoryReader({story, mode, ageBand='7-10', onClose}) {
   const [page, setPage] = useS_s(0);
   const [playing, setPlaying] = useS_s(mode === 'listen');
   const [askOpen, setAskOpen] = useS_s(false);
+  const speechRef = React.useRef(null);
+
+  // Reset page when story changes
+  React.useEffect(() => {
+    setPage(0);
+  }, [story.id]);
 
   const pagesByBand = {
     '3-6': [
@@ -142,6 +149,89 @@ function StoryReader({story, mode, ageBand='7-10', onClose}) {
   const pages = pagesByBand[ageBand] || pagesByBand['7-10'];
   const cur = pages[Math.min(page, pages.length-1)];
 
+  // Ensure voices are loaded
+  React.useEffect(() => {
+    const loadVoices = () => {
+      window.speechSynthesis.getVoices();
+    };
+    window.speechSynthesis.addEventListener('voiceschanged', loadVoices);
+    loadVoices();
+    return () => window.speechSynthesis.removeEventListener('voiceschanged', loadVoices);
+  }, []);
+
+  React.useEffect(() => {
+    if (playing) {
+      // Small delay to ensure browser is ready for speech after interaction
+      const t = setTimeout(() => speak(cur), 100);
+      return () => { clearTimeout(t); stop(); };
+    } else {
+      stop();
+    }
+    return () => stop();
+  }, [playing, page, cur]);
+
+  function speak(text) {
+    window.speechSynthesis.cancel();
+    if (!text || !playing) return;
+
+    // Very simple cleaning to avoid breaking the engine
+    const cleanText = text.replace(/[🇩🇿]|DZ/g, ' الجزائر ').trim();
+
+    // Split text into sentences for more stable reading
+    const sentences = cleanText.split(/[.،!؟]\s+/).filter(s => s.length > 1);
+    let currentSentence = 0;
+
+    const speakSentence = (index) => {
+      if (index >= sentences.length || !playing) {
+        if (page < pages.length - 1 && playing) {
+          setTimeout(() => setPage(p => p + 1), 1500);
+        } else {
+          setPlaying(false);
+        }
+        return;
+      }
+
+      const ut = new SpeechSynthesisUtterance(sentences[index]);
+      
+      // Try to find the BEST Arabic voice (Preferring MALE for Uncle Rachid)
+      const voices = window.speechSynthesis.getVoices();
+      const bestVoice = voices.find(v => v.lang.startsWith('ar') && (v.name.includes('Male') || v.name.includes('Naayf') || v.name.includes('Hamza'))) ||
+                        voices.find(v => v.lang === 'ar-SA' || v.lang === 'ar-EG') || 
+                        voices.find(v => v.lang.startsWith('ar')) ||
+                        voices.find(v => v.name.includes('Arabic'));
+      
+      if (bestVoice) {
+        ut.voice = bestVoice;
+        ut.lang = bestVoice.lang;
+      } else {
+        ut.lang = 'ar';
+      }
+
+      // Voice settings for an "Old Wise Man" (Uncle Rachid) - Balanced
+      ut.rate = 0.88; // More natural speed
+      ut.pitch = 0.85; // Deep but clear
+
+      ut.onend = () => {
+        setTimeout(() => speakSentence(index + 1), 200);
+      };
+
+      ut.onerror = (e) => {
+        console.error("Sentence error:", e);
+        // Fallback: just try the next sentence
+        setTimeout(() => speakSentence(index + 1), 500);
+      };
+
+      window.speechSynthesis.speak(ut);
+      speechRef.current = ut;
+    };
+
+    speakSentence(0);
+  }
+
+  function stop() {
+    window.speechSynthesis.cancel();
+  }
+
   return (
     <div style={mStyles.fullscreen}>
       {/* Top bar */}
@@ -164,10 +254,25 @@ function StoryReader({story, mode, ageBand='7-10', onClose}) {
         <div style={{maxWidth:680, margin:'0 auto', background:'#FFFBF1', borderRadius:24, padding:'40px 36px',
           border:`3px solid ${story.color}`, boxShadow:'0 12px 40px rgba(60,30,10,.15)',
           minHeight:380, position:'relative'}}>
-          <div style={{display:'flex', justifyContent:'center', marginBottom:24}}><StoryCover story={story} size={96}/></div>
+          <div style={{display:'flex', justifyContent:'center', marginBottom:24, position:'relative'}}>
+            <StoryCover story={story} size={96}/>
+            {mode === 'listen' && (
+              <img src="assets/storyteller.png" alt="الراوي" style={{
+                position:'absolute', bottom:-10, insetInlineEnd:-10, width:60, height:60,
+                borderRadius:15, border:'3px solid #FFF', boxShadow:'0 4px 12px rgba(0,0,0,.15)',
+                animation: playing ? 'talking 1s ease-in-out infinite' : 'none'
+              }}/>
+            )}
+          </div>
           <p style={{fontSize:22, lineHeight:2, color:'#2A1810', textAlign:'justify', textWrap:'pretty'}}>
             {cur}
           </p>
+          <style>{`
+            @keyframes talking {
+              0%, 100% { transform: scale(1); }
+              50% { transform: scale(1.1); }
+            }
+          `}</style>
         </div>
       </div>
 
@@ -192,13 +297,37 @@ function StoryReader({story, mode, ageBand='7-10', onClose}) {
 
             <div style={{flex:1, display:'flex', flexDirection:'column', gap:6}}>
               <div style={{display:'flex', justifyContent:'space-between', fontSize:12, color:'#7a5538'}}>
-                <span>{playing?'يقرأ القارئ...':'متوقف'}</span>
-                <span>0:42 / 1:24</span>
+                <span>{playing ? 'يقرأ الآن بصوت عمّي رشيد...' : 'توقف القارئ'}</span>
+                <span>الصفحة {page + 1} من {pages.length}</span>
               </div>
-              <div style={{height:6, background:'var(--c-soft)', borderRadius:3, overflow:'hidden'}}>
-                <div style={{width:'50%', height:'100%', background:story.color, borderRadius:3}}/>
+              <div style={{height:8, background:'var(--c-soft)', borderRadius:4, overflow:'hidden', position:'relative'}}>
+                {/* Real progress bar based on pages */}
+                <div style={{
+                  width:`${((page + 1) / pages.length) * 100}%`, 
+                  height:'100%', background:story.color, borderRadius:4,
+                  transition:'width 0.5s ease'
+                }}/>
+                {/* Voice wave animation when playing */}
+                {playing && (
+                  <div style={{position:'absolute', inset:0, display:'flex', gap:2, padding:'0 10px', alignItems:'center', opacity:0.4}}>
+                    {[1,2,3,4,5,6,7,8].map(i => (
+                      <div key={i} style={{
+                        flex:1, height:'60%', background:'#FFF', borderRadius:2,
+                        animation:`wave 1s ease-in-out infinite`,
+                        animationDelay:`${i*0.1}s`
+                      }}/>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
+
+            <style>{`
+              @keyframes wave {
+                0%, 100% { height: 30%; }
+                50% { height: 80%; }
+              }
+            `}</style>
 
             <button onClick={()=>{setPlaying(false); setAskOpen(true);}} className="squish" style={{
               background:'var(--c-clay)', color:'#FFF6E5', padding:'14px 22px', borderRadius:999,

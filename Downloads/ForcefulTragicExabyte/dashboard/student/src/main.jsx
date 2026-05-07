@@ -1,3 +1,26 @@
+import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom/client';
+
+// Side-effect imports to register globals on window
+import '../tweaks-panel.jsx';
+import './icons.jsx';
+import './data.jsx';
+import './landing.jsx';
+import './app-shell.jsx';
+import './section-game.jsx';
+import './section-stories.jsx';
+import './section-math.jsx';
+import './section-spell.jsx';
+import './section-coloring.jsx';
+import './section-today-history.jsx';
+import './section-parent-dashboard.jsx';
+import './section-kitchen.jsx';
+import './section-dresses.jsx';
+import './section-passport.jsx';
+import './section-puzzles.jsx';
+import './section-national-history.jsx';
+import './section-daily-wisdom.jsx';
+
 // Main entry — wires landing → app shell + tweaks panel
 const { useState: useS_main, useEffect: useE_main } = React;
 
@@ -7,18 +30,30 @@ const PALETTES = {
   desert: {name:'رمال الصحراء',    clay:'#B5651D', amber:'#D4A574', sun:'#F4D8A8', mint:'#7C8C5B', cream:'#FBF3E2', paper:'#FFF8EA', soft:'#F0E2BF'},
 };
 
-const LEARNING_TIERS = {
-  '3-6': { key:'3-6', name:'براعم', accent:'#FF8C42', label:'من 4 إلى 6' },
-  '7-10': { key:'7-10', name:'نجوم', accent:'#4A90D9', label:'من 7 إلى 10' },
-  '11+': { key:'11+', name:'عقول', accent:'#8B5CF6', label:'11 سنة فأكثر' },
-};
-
-function getTierFromAge(age) {
-  const n = Number(age);
-  if (!Number.isFinite(n)) return LEARNING_TIERS['7-10'];
-  if (n <= 6) return LEARNING_TIERS['3-6'];
-  if (n <= 10) return LEARNING_TIERS['7-10'];
-  return LEARNING_TIERS['11+'];
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null, info: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+  componentDidCatch(error, info) {
+    this.setState({ info });
+    console.error("ErrorBoundary caught an error", error, info);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{padding: 40, background: 'red', color: 'white', minHeight: '100vh', direction: 'ltr', textAlign: 'left'}}>
+          <h1>Something went wrong.</h1>
+          <pre>{this.state.error?.toString()}</pre>
+          <pre>{this.state.info?.componentStack}</pre>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
 }
 
 function App() {
@@ -46,16 +81,27 @@ function App() {
     r.setProperty('--c-soft', p.soft);
   }, [t.palette]);
 
-  const profileSeeds = [
-    { id:'yasmine', name:'ياسمين', gender:'girl', age:6, avatar:'assets/pfp/girl.png' },
-    { id:'adam', name:'آدم', gender:'boy', age:9, avatar:'assets/pfp/boy.png' },
-    { id:'rayane', name:'ريان', gender:'boy', age:12, avatar:'assets/pfp/boy.png' },
+  const profiles = [
+    { id:'yasmine', name:'ياسمين', gender:'girl', ageBand:'3-6', avatar:'/assets/pfp/girl.png' },
+    { id:'adam', name:'آدم', gender:'boy', ageBand:'7-10', avatar:'/assets/pfp/boy.png' },
+    { id:'rayane', name:'ريان', gender:'boy', ageBand:'11+', avatar:'/assets/pfp/boy.png' },
   ];
-  const profiles = profileSeeds.map((p) => {
-    const tier = getTierFromAge(p.age);
-    return { ...p, ageBand:tier.key, tier };
-  });
   const activeProfile = profiles.find(p => p.id === activeProfileId) || profiles[0];
+  const p = PALETTES[t.palette] || PALETTES.warm;
+
+  // Pre-load essential assets for instant display
+  useE_main(() => {
+    const assetsToLoad = [
+      '/assets/logo-maqam-transparent.png',
+      '/assets/pfp/girl.png',
+      '/assets/pfp/boy.png',
+      '/assets/charchters/algeria-map.png'
+    ];
+    assetsToLoad.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
 
   // Hide loader
   useE_main(() => {
@@ -64,7 +110,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <ErrorBoundary>
       {view === 'landing' && (
         <Landing onEnter={()=>setPickerOpen(true)} variant={t.landingVariant}/>
       )}
@@ -108,11 +154,16 @@ function App() {
           <TweakButton label="صفحة الطفل" onClick={()=>setView('app')}/>
         </TweakSection>
       </TweaksPanel>
-    </>
+    </ErrorBoundary>
   );
 }
 
 function ProfilePicker({profiles, onPick, onClose}) {
+  const ageBandLabel = {
+    '3-6': 'من 3 إلى 6',
+    '7-10': 'من 7 إلى 10',
+    '11+': '11 سنة فأكثر',
+  };
   return (
     <div style={{
       position:'fixed', inset:0, background:'rgba(42,24,16,.72)', backdropFilter:'blur(4px)',
@@ -145,17 +196,17 @@ function ProfilePicker({profiles, onPick, onClose}) {
             }}>
               <img src={p.avatar} alt={p.name} style={{
                 width:92, height:92, borderRadius:'50%', objectFit:'cover',
-                border:`4px solid ${p.tier?.accent || 'var(--c-amber)'}`, background:'#FFF6E5'
+                border:'4px solid var(--c-amber)', background:'#FFF6E5'
               }}/>
               <div style={{fontFamily:'var(--font-display)', fontSize:24, fontWeight:700, color:'#3a2614'}}>{p.name}</div>
               <div style={{fontSize:12, color:'#7a5538', fontWeight:700}}>
-                {p.gender === 'boy' ? 'ولد' : 'بنت'} · {p.age} سنوات
+                {p.gender === 'boy' ? 'ولد' : 'بنت'}
               </div>
               <div style={{
                 fontSize:11, color:'#5a3a1f', fontWeight:800, background:'#FFE9C4',
-                border:`2px solid ${p.tier?.accent || 'var(--c-amber)'}`, borderRadius:999, padding:'4px 10px'
+                border:'2px solid var(--c-amber)', borderRadius:999, padding:'4px 10px'
               }}>
-                {p.tier?.name || p.ageBand} · {p.tier?.label || p.ageBand}
+                {ageBandLabel[p.ageBand] || p.ageBand}
               </div>
             </button>
           ))}

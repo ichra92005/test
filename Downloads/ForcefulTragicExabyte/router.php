@@ -1,7 +1,6 @@
 <?php
 // Maqam PHP Router — built-in server entry point
-require_once __DIR__ . '/dashboard/student/config/config.php';
-require_once __DIR__ . '/dashboard/student/includes/functions.php';
+require_once __DIR__ . '/site/frontend/config/config.php';
 
 $uri  = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri  = rtrim($uri, '/') ?: '/';

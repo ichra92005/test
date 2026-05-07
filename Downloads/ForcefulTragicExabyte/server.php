@@ -19,9 +19,24 @@ if ($uri !== '/' && file_exists($requestedFile) && is_file($requestedFile)) {
     }
     // في حالة عدم وجود الخادم المدمج، نرسل الملف يدوياً
     $mime = mime_content_type($requestedFile) ?: 'application/octet-stream';
+    if (preg_match('/\.css$/', $requestedFile)) $mime = 'text/css';
+    if (preg_match('/\.js$/', $requestedFile)) $mime = 'application/javascript';
+    if (preg_match('/\.jsx$/', $requestedFile)) $mime = 'text/jsx';
     header('Content-Type: ' . $mime);
     readfile($requestedFile);
     exit;
+} else if ($uri !== '/') {
+    // Fallback: check if the file exists in dashboard/student/ (for maqam 2 assets)
+    $studentFile = __DIR__ . '/dashboard/student' . $uri;
+    if (file_exists($studentFile) && is_file($studentFile)) {
+        $mime = mime_content_type($studentFile) ?: 'application/octet-stream';
+        if (preg_match('/\.css$/', $studentFile)) $mime = 'text/css';
+        if (preg_match('/\.js$/', $studentFile)) $mime = 'application/javascript';
+        if (preg_match('/\.jsx$/', $studentFile)) $mime = 'text/jsx';
+        header('Content-Type: ' . $mime);
+        readfile($studentFile);
+        exit;
+    }
 }
 
 // === 1.4) خريطة الموقع الديناميكية ===
@@ -50,9 +65,9 @@ if (in_array($uri, ['/sitemap.xml', '/sitemap.php'], true)) {
 
 // === 2) جدول التوجيه (Routing Table) ===
 $routes = [
-    '/'            => __DIR__ . '/dashboard/student/index.html',
-    '/index'       => __DIR__ . '/dashboard/student/index.html',
-    '/index.php'   => __DIR__ . '/dashboard/student/index.html',
+    '/'            => __DIR__ . '/index.php',
+    '/index'       => __DIR__ . '/index.php',
+    '/index.php'   => __DIR__ . '/index.php',
     '/about'       => __DIR__ . '/about/index.php',
     '/program'     => __DIR__ . '/program/index.php',
     '/programs'    => __DIR__ . '/program/index.php',

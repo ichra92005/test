@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 // App shell — kid home + section nav
 const { useState: useState_app, useEffect: useEffect_app } = React;
 
@@ -10,11 +11,6 @@ function AppShell({onExit, sectionInitial='home', profile}) {
     } catch { return ['algiers']; }
   });
   const [premium, setPremium] = useState_app(false);
-  const [points, setPoints] = useState_app(() => {
-    try { return parseInt(localStorage.getItem('maqam_points') || '0', 10); }
-    catch { return 0; }
-  });
-  const addPoints = (n) => setPoints(p => p + (n|0));
 
   const collect = (id) => setCollected(prev => prev.includes(id) ? prev : [...prev, id]);
 
@@ -22,27 +18,27 @@ function AppShell({onExit, sectionInitial='home', profile}) {
     localStorage.setItem('maqam_collected', JSON.stringify(collected));
   }, [collected]);
 
-  useEffect_app(() => {
-    localStorage.setItem('maqam_points', String(points));
-  }, [points]);
-
-  const ctx = { setSection, collected, collect, premium, setPremium, profile, points, addPoints };
+  const ctx = { setSection, collected, collect, premium, setPremium, profile };
 
   return (
     <div style={shellStyles.app}>
-      <TopBar onExit={onExit} setSection={setSection} collected={collected} profile={profile} points={points}/>
+      <TopBar onExit={onExit} setSection={setSection} collected={collected} profile={profile}/>
       <div style={{minHeight:'calc(100vh - 90px)'}}>
         {section === 'home' && <KidHome ctx={ctx} profile={profile}/>}
         {section === 'game' && <SectionGame ctx={ctx}/>}
         {section === 'stories' && <SectionStories ctx={ctx}/>}
+        {section === 'puzzles' && <SectionPuzzles ctx={ctx}/>}
+        {section === 'kitchen' && <SectionKitchen ctx={ctx}/>}
+        {section === 'dresses' && <SectionDresses ctx={ctx}/>}
+        {section === 'passport' && <SectionPassport ctx={ctx}/>}
+        {section === 'parent' && <SectionParentDashboard ctx={ctx}/>}
+        {section === 'nationalHistory' && <SectionNationalHistory ctx={ctx}/>}
         {section === 'todayHistory' && <SectionTodayHistory ctx={ctx}/>}
         {section === 'dailyWisdom' && <SectionDailyWisdom ctx={ctx}/>}
         {section === 'math' && <SectionMath ctx={ctx}/>}
         {section === 'spell' && <SectionSpell ctx={ctx}/>}
         {section === 'album' && <Album ctx={ctx}/>}
         {section === 'coloring' && <SectionColoring ctx={ctx}/>}
-        {section === 'puzzle' && <SectionPazzel ctx={ctx}/>}
-        {section === 'shapes' && <SectionSmartShapes ctx={ctx}/>}
       </div>
     </div>
   );
@@ -57,7 +53,7 @@ const shellStyles = {
   },
 };
 
-function TopBar({onExit, setSection, collected, profile, points}) {
+function TopBar({onExit, setSection, collected, profile}) {
   return (
     <div style={shellStyles.topbar}>
       <div style={{display:'flex', alignItems:'center', gap:14}}>
@@ -68,18 +64,28 @@ function TopBar({onExit, setSection, collected, profile, points}) {
           <Icon.Back size={22} color="var(--c-clay)"/>
         </button>
         <button onClick={()=>setSection('home')} style={{display:'flex', alignItems:'center', gap:10}}>
-          <img src="assets/logo-maqam-transparent.png" alt="مقام" style={{height:40}}/>
+          <img src="/assets/logo-maqam-transparent.png" alt="مقام" style={{height:40}}/>
+        </button>
+      </div>
+      
+      <div style={{display:'flex', gap:10, alignItems:'center'}}>
+        <button onClick={()=>setSection('parent')} className="squish" style={{
+          background:'#F1F5F9', color:'#475569', padding:'8px 14px', borderRadius:14,
+          display:'flex', gap:6, alignItems:'center', border:'1px solid #E2E8F0',
+          fontSize:12, fontWeight:700
+        }}>
+          <Icon.Settings size={16}/> لوحة الأولياء
         </button>
       </div>
 
-      <div style={{display:'flex', alignItems:'center', gap:10}}>
-        <div style={{
-          background:'linear-gradient(135deg,#FFF6E5,#FFE9C4)', padding:'8px 14px', borderRadius:999,
-          display:'flex', gap:6, alignItems:'center', fontWeight:800, fontSize:15, color:'var(--c-clay)',
-          border:'2px solid var(--c-amber)'
+      <div style={{display:'flex', gap:12, alignItems:'center'}}>
+        <button onClick={()=>setSection('passport')} className="squish" style={{
+          background:'#8B4513', color:'#FFF', padding:'8px 16px', borderRadius:20,
+          display:'flex', gap:8, alignItems:'center', border:'3px solid #5D2E0A',
+          boxShadow:'0 4px 0 #5D2E0A', fontSize:14, fontWeight:800
         }}>
-          <Icon.Star size={16} color="var(--c-amber)"/> {points || 0}
-        </div>
+          <Icon.Cards size={20}/> جواز السفر
+        </button>
         <button onClick={()=>setSection('album')} className="squish" style={{
           background:'#FFE9C4', padding:'10px 16px', borderRadius:999,
           display:'flex', gap:8, alignItems:'center', fontWeight:700, fontSize:14, color:'#5a3a1f',
@@ -90,7 +96,7 @@ function TopBar({onExit, setSection, collected, profile, points}) {
         </button>
         <div style={{width:42, height:42, borderRadius:'50%', background:'var(--c-soft)',
           display:'grid', placeItems:'center', color:'#FFF6E5', border:'2px solid #FFF6E5', overflow:'hidden'}}>
-          <img src={profile?.avatar || 'assets/pfp/girl.png'} alt={profile?.name || 'Profile'} style={{width:'100%', height:'100%', objectFit:'cover'}} />
+          <img src={profile?.avatar || '/assets/pfp/girl.png'} alt={profile?.name || 'Profile'} style={{width:'100%', height:'100%', objectFit:'cover'}} />
         </div>
       </div>
     </div>
@@ -104,31 +110,36 @@ function KidHome({ctx, profile}) {
   const ageBand = profile?.ageBand || '7-10';
   const sectionsByBand = {
     '3-6': [
+      {id:'kitchen', icon:<Icon.Sparkle size={80}/>, title:'مطبخنا', subtitle:'أكلات لذيذة', color:'#F2994A', bg:'#FFF6E5', tag:'جديد'},
+      {id:'dresses', icon:<Icon.Crown size={80}/>, title:'أزياء بلادي', subtitle:'تراثنا الجميل', color:'#E91E63', bg:'#FFF0F5', tag:'جديد'},
+      {id:'puzzles', icon:<Icon.Game size={80}/>, title:'كنوز الجزائر', subtitle:'ألغاز الصور', color:'#F2994A', bg:'#FFF6E5', tag:'جديد'},
       {id:'coloring', icon:<Icon.Brush size={80}/>, title:'التلوين', subtitle:'ألوان مرحة للأطفال', color:'#9B51E0', bg:'#F3E8FF', tag:null},
-      {id:'puzzle', icon:<div style={{fontSize:80, lineHeight:'1.1', textAlign:'center'}}>🧩</div>, title:'البازل', subtitle:'ركّب الصورة قطعة بقطعة', color:'#7B4CC2', bg:'#EEE8FF', tag:null},
-      {id:'shapes', icon:<div style={{fontSize:80, lineHeight:'1.1', textAlign:'center'}}>✏️</div>, title:'رسم الأشكال', subtitle:'تعلّم الرسم خطوة بخطوة', color:'#2C7A51', bg:'#E8F4ED', tag:null},
       {id:'stories', icon:<Icon.Book size={80}/>, title:'قارئ القصص', subtitle:'قصص قصيرة وسهلة', color:'#E67E22', bg:'#FFE9C4', tag:null},
+      {id:'nationalHistory', icon:<Icon.Star size={80}/>, title:'أبطال الجزائر', subtitle:'تعرف على أبطالنا', color:'#C0392B', bg:'#FBE3DF', tag:'مهم'},
       {id:'math', icon:<Icon.Math size={80}/>, title:'تعلم الحساب', subtitle:'عدّ وجمع بسيط', color:'#2C7A51', bg:'#E8F4ED', tag:'سهل'},
       {id:'spell', icon:<Icon.Spell size={80}/>, title:'تعلم الحروف', subtitle:'الحروف الأبجدية', color:'#C0392B', bg:'#FBE3DF', tag:'سهل'},
       {id:'dailyWisdom', icon:<Icon.Sparkle size={80} color="#7B4CC2"/>, title:'حكمة اليوم', subtitle:'رسالة تشجيع يومية', color:'#7B4CC2', bg:'#F4EBFF', tag:'يومي'},
     ],
     '7-10': [
+      {id:'passport', icon:<Icon.Cards size={80}/>, title:'جواز السفر', subtitle:'رحلاتك الاستكشافية', color:'#8B4513', bg:'#F5E6D3', tag:'مهم'},
+      {id:'kitchen', icon:<Icon.Sparkle size={80}/>, title:'مطبخنا', subtitle:'أكلات لذيذة', color:'#F2994A', bg:'#FFF6E5', tag:'جديد'},
+      {id:'dresses', icon:<Icon.Crown size={80}/>, title:'أزياء بلادي', subtitle:'تراثنا الجميل', color:'#E91E63', bg:'#FFF0F5', tag:'جديد'},
       {id:'game', icon:<Icon.Game size={80}/>, title:'العاب الخريطة', subtitle:'8 مغامرات', color:'#F9C74F', bg:'#FFF6E5', tag:null},
       {id:'stories', icon:<Icon.Book size={80}/>, title:'قصص الوطن', subtitle:'قصص أوضح وأطول', color:'#E67E22', bg:'#FFE9C4', tag:null},
-      {id:'coloring', icon:<Icon.Brush size={80}/>, title:'التلوين', subtitle:'ألوان مرحة ومبدعة', color:'#9B51E0', bg:'#F3E8FF', tag:null},
-      {id:'puzzle', icon:<div style={{fontSize:80, lineHeight:'1.1', textAlign:'center'}}>🧩</div>, title:'البازل', subtitle:'ركّب الصورة قطعة بقطعة', color:'#7B4CC2', bg:'#EEE8FF', tag:null},
-      {id:'shapes', icon:<div style={{fontSize:80, lineHeight:'1.1', textAlign:'center'}}>✏️</div>, title:'رسم الأشكال', subtitle:'تعلّم الرسم خطوة بخطوة', color:'#2C7A51', bg:'#E8F4ED', tag:null},
+      {id:'puzzles', icon:<Icon.Game size={80}/>, title:'كنوز الجزائر', subtitle:'ألغاز الصور', color:'#F2994A', bg:'#FFF6E5', tag:'جديد'},
+      {id:'nationalHistory', icon:<Icon.Star size={80}/>, title:'التاريخ الوطني', subtitle:'رحلة عبر الزمن', color:'#C0392B', bg:'#FBE3DF', tag:'جديد'},
       {id:'todayHistory', icon:<Icon.Book size={80}/>, title:'تاريخ اليوم', subtitle:'أحداث تاريخية مبسطة', color:'#5B6EE1', bg:'#EEF0FF', tag:'جديد'},
       {id:'math', icon:<Icon.Math size={80}/>, title:'الحساب المتقدم', subtitle:'عمليات وتحديات', color:'#2C7A51', bg:'#E8F4ED', tag:'متقدم'},
       {id:'spell', icon:<Icon.Spell size={80}/>, title:'تعلم الإنجليزية', subtitle:'مفردات وكلمات', color:'#C0392B', bg:'#FBE3DF', tag:'جديد'},
       {id:'dailyWisdom', icon:<Icon.Sparkle size={80} color="#7B4CC2"/>, title:'حكمة اليوم', subtitle:'رسالة تشجيع يومية', color:'#7B4CC2', bg:'#F4EBFF', tag:'يومي'},
     ],
     '11+': [
+      {id:'passport', icon:<Icon.Cards size={80}/>, title:'جواز السفر', subtitle:'رحلاتك الاستكشافية', color:'#8B4513', bg:'#F5E6D3', tag:'مهم'},
+      {id:'kitchen', icon:<Icon.Sparkle size={80}/>, title:'مطبخنا', subtitle:'أكلات لذيذة', color:'#F2994A', bg:'#FFF6E5', tag:'جديد'},
+      {id:'dresses', icon:<Icon.Crown size={80}/>, title:'أزياء بلادي', subtitle:'تراثنا الجميل', color:'#E91E63', bg:'#FFF0F5', tag:'جديد'},
       {id:'game', icon:<Icon.Game size={80}/>, title:'تحديات الخريطة', subtitle:'أسئلة أصعب ومراحل أدق', color:'#F9C74F', bg:'#FFF6E5', tag:'متقدم'},
       {id:'stories', icon:<Icon.Book size={80}/>, title:'قصص معمقة', subtitle:'قراءة تاريخية أعمق', color:'#E67E22', bg:'#FFE9C4', tag:'تحليل'},
-      {id:'coloring', icon:<Icon.Brush size={80}/>, title:'التلوين', subtitle:'إبداع بالألوان', color:'#9B51E0', bg:'#F3E8FF', tag:null},
-      {id:'puzzle', icon:<div style={{fontSize:80, lineHeight:'1.1', textAlign:'center'}}>🧩</div>, title:'البازل', subtitle:'ركّب الصورة قطعة بقطعة', color:'#7B4CC2', bg:'#EEE8FF', tag:null},
-      {id:'shapes', icon:<div style={{fontSize:80, lineHeight:'1.1', textAlign:'center'}}>✏️</div>, title:'رسم الأشكال', subtitle:'تعلّم الرسم خطوة بخطوة', color:'#2C7A51', bg:'#E8F4ED', tag:null},
+      {id:'puzzles', icon:<Icon.Game size={80}/>, title:'كنوز الجزائر', subtitle:'ألغاز الصور', color:'#F2994A', bg:'#FFF6E5', tag:'جديد'},
       {id:'todayHistory', icon:<Icon.Book size={80}/>, title:'تحليل حدث اليوم', subtitle:'سياق تاريخي وتفكير نقدي', color:'#5B6EE1', bg:'#EEF0FF', tag:'متقدم'},
       {id:'math', icon:<Icon.Math size={80}/>, title:'رياضيات متقدمة', subtitle:'ألغاز منطق ومسائل', color:'#2C7A51', bg:'#E8F4ED', tag:'متقدم'},
       {id:'spell', icon:<Icon.Spell size={80}/>, title:'English Skills', subtitle:'Vocabulary and comprehension', color:'#C0392B', bg:'#FBE3DF', tag:'advanced'},
@@ -136,7 +147,6 @@ function KidHome({ctx, profile}) {
     ],
   };
   const sections = sectionsByBand[ageBand] || sectionsByBand['7-10'];
-  const hasMapGame = sections.some((s) => s.id === 'game');
   return (
     <div style={{padding:'40px 6% 80px', maxWidth:1280, margin:'0 auto'}}>
       <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:32}}>
@@ -147,7 +157,7 @@ function KidHome({ctx, profile}) {
           </h1>
         </div>
         <div style={{display:'flex', gap:14}}>
-          <Stat icon={<Icon.Sparkle size={24} color="var(--c-amber)"/>} label="نقاطك" value={ctx.points || 0}/>
+          <Stat icon={<Icon.Sparkle size={24} color="var(--c-amber)"/>} label="نقاطك" value="240"/>
           <Stat icon={<Icon.Cards size={24} color="var(--c-mint)"/>} label="أبطالك" value={`${ctx.collected.length}/${REGIONS.length}`}/>
           <Stat icon={<Icon.Star size={24} color="var(--c-clay)"/>} label="أيام متتالية" value="7"/>
         </div>
@@ -171,31 +181,29 @@ function KidHome({ctx, profile}) {
         </button>
       )}
 
-      {/* Daily mission (only for categories that include map game) */}
-      {hasMapGame && (
-        <div style={{
-          background:'linear-gradient(135deg, var(--c-clay), var(--c-amber))',
-          borderRadius:28, padding:'24px 32px', display:'flex', alignItems:'center', gap:24,
-          color:'#FFF6E5', marginBottom:32, position:'relative', overflow:'hidden'
-        }}>
-          <div style={{position:'absolute', insetInlineEnd:18, top:18, opacity:.22}}>
-            <Icon.Sparkle size={84} color="#FFF6E5"/>
-          </div>
-          <div style={{width:74, height:74, borderRadius:'50%', background:'rgba(255,255,255,.16)', display:'grid', placeItems:'center'}}>
-            <Icon.Cards size={38} color="#FFF6E5"/>
-          </div>
-          <div style={{flex:1}}>
-            <div style={{fontSize:14, opacity:.9, fontWeight:700}}>تحدّي اليوم</div>
-            <div style={{fontFamily:'var(--font-display)', fontSize:26, fontWeight:700, marginTop:4}}>
-              أكمل لعبة وهران واحصل على بطاقة جديدة!
-            </div>
-          </div>
-          <button onClick={()=>ctx.setSection('game')} className="squish" style={{
-            background:'#FFF6E5', color:'var(--c-clay)', padding:'14px 28px', borderRadius:999,
-            fontWeight:800, fontSize:16, boxShadow:'0 4px 0 rgba(0,0,0,.2)'
-          }}>ابدأ الآن</button>
+      {/* Daily mission */}
+      <div style={{
+        background:'linear-gradient(135deg, var(--c-clay), var(--c-amber))',
+        borderRadius:28, padding:'24px 32px', display:'flex', alignItems:'center', gap:24,
+        color:'#FFF6E5', marginBottom:32, position:'relative', overflow:'hidden'
+      }}>
+        <div style={{position:'absolute', insetInlineEnd:18, top:18, opacity:.22}}>
+          <Icon.Sparkle size={84} color="#FFF6E5"/>
         </div>
-      )}
+        <div style={{width:74, height:74, borderRadius:'50%', background:'rgba(255,255,255,.16)', display:'grid', placeItems:'center'}}>
+          <Icon.Cards size={38} color="#FFF6E5"/>
+        </div>
+        <div style={{flex:1}}>
+          <div style={{fontSize:14, opacity:.9, fontWeight:700}}>تحدّي اليوم</div>
+          <div style={{fontFamily:'var(--font-display)', fontSize:26, fontWeight:700, marginTop:4}}>
+            أكمل لعبة وهران واحصل على بطاقة جديدة!
+          </div>
+        </div>
+        <button onClick={()=>ctx.setSection('game')} className="squish" style={{
+          background:'#FFF6E5', color:'var(--c-clay)', padding:'14px 28px', borderRadius:999,
+          fontWeight:800, fontSize:16, boxShadow:'0 4px 0 rgba(0,0,0,.2)'
+        }}>ابدأ الآن</button>
+      </div>
 
       {/* Section grid */}
       <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(260px, 1fr))', gap:20}}>

@@ -1,19 +1,31 @@
+import React from 'react';
 // All content data — Algerian regions, cards, stories, etc.
 
 const REGIONS = [
   {id:'algiers',     name:'الجزائر',      subtitle:'العاصمة',      emoji:'🕌', x:50, y:9,  color:'#F2C94C', cardId:'casbah',     unlocked:true,  completed:true,  levelsDone:4,
-   hero:{name:'مصطفى بن بولعيد',  img:'assets/charchters/mstf_bn_blaid.png',  bio:'أحد قادة الثورة الجزائرية ومؤسس الولاية الأولى. شهيد لا تُنسى تضحياته.'}},
+   hero:{name:'مصطفى بن بولعيد',  img:'assets/charchters/mstf_bn_blaid.png',  bio:'أسد الأوراس وأحد قادة الثورة، رمز الشجاعة والتنظيم. ضحّى بحياته من أجل أن نعيش أحراراً.'}},
   {id:'oran',        name:'وهران',        subtitle:'الباهية',      emoji:'⛵', x:36, y:11, color:'#56CCF2', cardId:'santa-cruz', unlocked:true,  completed:false, levelsDone:2,
-   hero:{name:'لربي بن مهيدي',     img:'assets/charchters/larbi_bn_mhidi.png', bio:'بطل الثورة الذي أشعل نار الكفاح في الغرب الجزائري. رمز التضحية والشجاعة.'}},
+   hero:{name:'العربي بن مهيدي',     img:'assets/charchters/larbi_bn_mhidi.png', bio:'حكيم الثورة الذي قال: "ألقوا بالثورة إلى الشارع يحتضنها الشعب". رمز الابتسامة التي لا تقهر.'}},
   {id:'constantine', name:'قسنطينة',     subtitle:'مدينة الجسور',  emoji:'🏰', x:67, y:11, color:'#BB6BD9', cardId:'bridges',    unlocked:true,  completed:false, levelsDone:0,
-   hero:{name:'ديدوش مراد',         img:'assets/charchters/ddch_mrd_1.png',     bio:'شهيد الثورة وقائد الولاية الثانية، سقط فداءً للجزائر وهو في ريعان الشباب.'}},
+   hero:{name:'ديدوش مراد',         img:'assets/charchters/ddch_mrd_1.png',     bio:'أصغر قادة الثورة عمراً، كان شعلة من النشاط والوطنية. استشهد وهو يقود معاركه الأولى ببطولة.'}},
   {id:'bechar',      name:'بشار',         subtitle:'الواحات',      emoji:'🌴', x:28, y:32, color:'#F2994A', cardId:'oasis',      unlocked:false, completed:false, levelsDone:0,
-   hero:{name:'كريم بلقاسم',        img:'assets/charchters/krim_blkcm.jpeg',    bio:'مفاوض اتفاقيات إيفيان ورمز الكفاح الأمازيغي والوطني الجزائري.'}},
+   hero:{name:'الأمير عبد القادر',    img:'assets/charchters/krim_blkcm.jpeg',    bio:'مؤسس الدولة الجزائرية الحديثة، بطل في الحرب وحكيم في السلام، جمع بين الفروسية والعلم.'}},
   {id:'ouargla',     name:'ورقلة',        subtitle:'النخيل',       emoji:'🏝', x:58, y:36, color:'#6FCF97', cardId:'palms',      unlocked:false, completed:false, levelsDone:0,
-   hero:{name:'محمد بوضياف',        img:'assets/charchters/mhmd_bdf_-_Copy.png',bio:'من مؤسسي جبهة التحرير الوطني، رمز وطني عاش وضحّى من أجل الجزائر الحرة.'}},
+   hero:{name:'فاطمة نسومر',        img:'assets/charchters/mhmd_bdf_-_Copy.png',bio:'المرأة البطلة التي قادت المقاومة في بلاد القبائل ضد جيوش قوية جداً. رمز القوة والصبر.'}},
   {id:'tamanrasset', name:'تامنراست',    subtitle:'الهقار',       emoji:'⛺', x:58, y:78, color:'#EB5FA6', cardId:'hoggar',     unlocked:false, completed:false, levelsDone:0,
-   hero:{name:'خريطة الجزائر',      img:'assets/charchters/algeria-map.png',    bio:'وطننا الجزائر — أرض الحضارات، من البحر الأبيض إلى صحراء الهقار الشاسعة.'}},
+   hero:{name:'خريطة الجزائر',      img:'assets/charchters/algeria-map.png',    bio:'وطننا الجزائر — أكبر بلد في إفريقيا، أرضنا التي نحبها ونحميها بالعمل والاجتهاد.'}},
 ];
+
+const TIMELINE_EVENTS = [
+  {year:'1830', title:'بداية المقاومة', desc:'بداية تصدي الشعب الجزائري للاحتلال الفرنسي في كل أنحاء الوطن.'},
+  {year:'1832', title:'مبايعة الأمير', desc:'اختيار الأمير عبد القادر قائداً للمقاومة وتأسيس الدولة الجزائرية.'},
+  {year:'1945', title:'8 ماي', desc:'خروج الجزائريين في مظاهرات كبرى للمطالبة بالاستقلال في سطيف وقالمة وخراطة.'},
+  {year:'1954', title:'أول نوفمبر', desc:'اندلاع الثورة التحرير الكبرى التي دامت 7 سنوات ونصف.'},
+  {year:'1960', title:'11 ديسمبر', desc:'خروج الشعب الجزائري في مظاهرات حاشدة لإعلان تمسكه بالاستقلال.'},
+  {year:'1962', title:'5 جويلية', desc:'يوم الاستقلال الكبير، رفرف العلم الوطني في كل سماء الجزائر.'},
+];
+window.TIMELINE_EVENTS = TIMELINE_EVENTS;
+
 
 // 4 levels per region — each is a mini-challenge
 const LEVELS = [
@@ -107,6 +119,31 @@ const DAILY_WISDOM = [
   {author:'عمّي رشيد', text:'بالصبر والمثابرة تستطيع أن تصبح بطلًا في دراستك وحياتك.'},
 ];
 
+const PUZZLES = [
+  {id:'maqam', title:'مقام الشهيد', desc:'أحد أهم معالم العاصمة والجزائر، يرمز لتضحيات الأبطال.', img:'assets/pazzel/maqam.png', difficulty:'سهل', pieces:9},
+  {id:'bridge', title:'جسر قسنطينة', desc:'جسر سيدي مسيد المعلق، يربط بين ضفتي مدينة الصخر العتيق.', img:'assets/pazzel/bridge.png', difficulty:'متوسط', pieces:16},
+  {id:'tassili', title:'طاسيلي ناجر', desc:'كهوف وجبال رائعة في الصحراء الجزائرية، تحتوي رسومات قديمة.', img:'assets/pazzel/tassili.png', difficulty:'صعب', pieces:25},
+  {id:'oran', title:'قلعة سانتا كروز', desc:'قلعة تاريخية تطل على مدينة وهران والبحر الأبيض المتوسط.', img:'assets/pazzel/oran.png', difficulty:'متوسط', pieces:16},
+];
+const DISHES = [
+  {
+    id:'couscous', title:'الكسكسي الجزائري', img:'assets/kitchen/couscous.png', color:'#F2994A',
+    desc:'سيد المائدة الجزائرية، يُحضر من القمح ويُزين بالخضار واللحم.',
+    ingredients: ['سميد الكسكسي', 'خضار مشكلة', 'لحم خروف', 'حمص'],
+    funFact: 'هل تعلم أن الكسكسي مدرج ضمن التراث العالمي لليونسكو؟'
+  },
+  {
+    id:'makroudh', title:'المقروض', img:'assets/kitchen/makroudh.png', color:'#D4A017',
+    desc:'حلوى تقليدية لذيذة من السميد والعسل، محشوة بالتمر.',
+    ingredients: ['سميد متوسط', 'عجينة التمر', 'عسل طبيعي', 'ماء الزهر'],
+    funFact: 'يُسمى المقروض "سلطان الحلويات" في الجزائر!'
+  },
+];
+window.DISHES = DISHES;
+
+window.PUZZLES = PUZZLES;
+
+window.TIMELINE_EVENTS = TIMELINE_EVENTS;
 window.REGIONS = REGIONS;
 window.CARDS = CARDS;
 window.STORIES = STORIES;
