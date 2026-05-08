@@ -505,100 +505,87 @@ require_once __DIR__ . '/../../../site/frontend/includes/dashboard/parent/header
             <i class="bi bi-people-fill" style="color:#2563EB"></i>
           </div>
           <div>
-            <div class="ss-title">إدارة الأطفال</div>
-            <div class="ss-sub">عرض وتعديل ملفات أطفالك المسجلين</div>
+            <div class="ss-title">إدارة الأطفال ووقت الشاشة</div>
+            <div class="ss-sub">أطفالك المسجلون وحدود الاستخدام اليومي</div>
           </div>
         </div>
-        <button class="ss-save-btn" onclick="showToast('إضافة طفل — قريباً!','green')" style="background:var(--blue)">
+        <button class="ss-save-btn" onclick="openAddChildModal()" style="background:#2563EB">
           <i class="bi bi-person-plus-fill"></i> <span>إضافة طفل</span>
         </button>
       </div>
       <div class="ss-body">
-        <div class="children-list">
-          <!-- Child 1 -->
-          <div class="child-row">
-            <div class="cr-avatar" style="background:#2D7A45">أ</div>
-            <div class="cr-info">
-              <div class="cr-name">أمين بن علي 🌱</div>
-              <div class="cr-meta">
-                <span><i class="bi bi-calendar2" style="font-size:.68rem"></i> ٨ سنوات</span>
-                <span style="opacity:.4">•</span>
-                <span><i class="bi bi-trophy" style="font-size:.68rem"></i> مكتشف ناشئ</span>
-                <span style="opacity:.4">•</span>
-                <span style="color:#22c55e"><i class="bi bi-circle-fill" style="font-size:.42rem"></i> متصل الآن</span>
-              </div>
-            </div>
-            <div class="cr-actions">
-              <button class="cr-btn crb-edit" onclick="showToast('تعديل ملف أمين — قريباً!','green')">
-                <i class="bi bi-pencil-fill"></i> تعديل
-              </button>
-              <button class="cr-btn crb-del" onclick="confirmDelete('أمين')">
-                <i class="bi bi-trash-fill"></i>
-              </button>
-            </div>
-          </div>
-          <!-- Child 2 -->
-          <div class="child-row">
-            <div class="cr-avatar" style="background:#E07824">س</div>
-            <div class="cr-info">
-              <div class="cr-name">سارة بن علي ⭐</div>
-              <div class="cr-meta">
-                <span><i class="bi bi-calendar2" style="font-size:.68rem"></i> ١١ سنة</span>
-                <span style="opacity:.4">•</span>
-                <span><i class="bi bi-trophy" style="font-size:.68rem"></i> نجم صاعد</span>
-                <span style="opacity:.4">•</span>
-                <span style="color:var(--gray-400)"><i class="bi bi-circle-fill" style="font-size:.42rem"></i> غير متصل</span>
-              </div>
-            </div>
-            <div class="cr-actions">
-              <button class="cr-btn crb-edit" onclick="showToast('تعديل ملف سارة — قريباً!','green')">
-                <i class="bi bi-pencil-fill"></i> تعديل
-              </button>
-              <button class="cr-btn crb-del" onclick="confirmDelete('سارة')">
-                <i class="bi bi-trash-fill"></i>
-              </button>
-            </div>
-          </div>
-          <!-- Add prompt -->
-          <div class="child-row" style="border-style:dashed;background:var(--gold-pale);border-color:rgba(232,184,48,.35);cursor:pointer;justify-content:center;gap:.6rem" onclick="showToast('إضافة طفل — قريباً!','green')">
-            <i class="bi bi-plus-circle-fill" style="color:var(--gold2);font-size:1.2rem"></i>
-            <span style="font-size:.87rem;font-weight:900;color:var(--gold2)">إضافة طفل جديد</span>
+        <div class="children-list" id="settChildrenList">
+          <div style="text-align:center;padding:2rem;color:var(--gray-400);font-weight:700">
+            <i class="bi bi-arrow-clockwise" style="font-size:1.5rem;display:block;margin-bottom:.4rem;opacity:.3"></i>
+            جاري تحميل الأطفال...
           </div>
         </div>
 
         <div class="f-divider" style="margin-top:1.4rem"></div>
+
         <div style="font-size:.78rem;font-weight:800;color:var(--gray-500);margin-bottom:.8rem;display:flex;align-items:center;gap:.4rem">
-          <i class="bi bi-clock-history" style="color:var(--orange)"></i> حدود وقت الاستخدام اليومي
+          <i class="bi bi-clock-history" style="color:var(--orange)"></i> ضبط وقت الشاشة اليومي
         </div>
-        <div class="toggle-list">
-          <div class="toggle-row">
-            <div class="tr-left">
-              <div class="tr-icon" style="background:var(--green-pale)"><i class="bi bi-shield-check" style="color:var(--green)"></i></div>
-              <div>
-                <div class="tr-title">حماية المحتوى — أمين</div>
-                <div class="tr-desc">الحد اليومي: ساعة واحدة</div>
-              </div>
-            </div>
-            <label class="tog">
-              <input type="checkbox" checked onchange="markDirty()">
-              <div class="tog-track"></div>
-              <div class="tog-thumb"></div>
-            </label>
+        <div id="settScreenTimeList">
+          <div style="font-size:.82rem;color:var(--gray-400);font-weight:700;padding:.5rem">
+            يرجى الانتظار — جاري تحميل البيانات...
           </div>
-          <div class="toggle-row">
-            <div class="tr-left">
-              <div class="tr-icon" style="background:var(--orange-pale)"><i class="bi bi-shield-check" style="color:var(--orange)"></i></div>
-              <div>
-                <div class="tr-title">حماية المحتوى — سارة</div>
-                <div class="tr-desc">الحد اليومي: ساعتان</div>
-              </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Child Modal (inside settings page) -->
+    <div id="addChildModalSett" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center">
+      <div style="background:#fff;width:90%;max-width:480px;border-radius:16px;padding:2rem;box-shadow:0 20px 40px rgba(0,0,0,.15)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+          <h3 style="font-size:1.15rem;font-weight:800">إضافة طفل جديد</h3>
+          <button onclick="closeAddChildModal()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:#94a3b8">✕</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="f-group">
+            <label class="f-label">الاسم *</label>
+            <div class="f-input-wrap">
+              <input type="text" id="acFname" class="f-input" placeholder="الاسم الأول" style="padding-left:1rem">
             </div>
-            <label class="tog">
-              <input type="checkbox" checked onchange="markDirty()">
-              <div class="tog-track"></div>
-              <div class="tog-thumb"></div>
-            </label>
           </div>
+          <div class="f-group">
+            <label class="f-label">اللقب *</label>
+            <div class="f-input-wrap">
+              <input type="text" id="acLname" class="f-input" placeholder="اللقب" style="padding-left:1rem">
+            </div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="f-group">
+            <label class="f-label">العمر (6–18) *</label>
+            <div class="f-input-wrap">
+              <input type="number" id="acAge" class="f-input" min="6" max="18" placeholder="العمر" style="padding-left:1rem">
+            </div>
+          </div>
+          <div class="f-group">
+            <label class="f-label">الجنس</label>
+            <div class="f-input-wrap">
+              <select id="acGender" class="f-input" style="padding-left:1rem">
+                <option value="boy">ولد</option>
+                <option value="girl">بنت</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="f-group">
+          <label class="f-label">احتياجات خاصة (اختياري)</label>
+          <div class="f-input-wrap">
+            <input type="text" id="acDisease" class="f-input" placeholder="مثال: عُسر القراءة" style="padding-left:1rem">
+          </div>
+        </div>
+        <div id="acResult" style="display:none;padding:.85rem 1rem;border-radius:10px;font-size:.85rem;font-weight:700;margin-bottom:1rem"></div>
+        <div style="display:flex;gap:10px;margin-top:1rem">
+          <button id="acSubmitBtn" class="ss-save-btn" style="flex:1;justify-content:center;padding:.7rem" onclick="submitAddChild()">
+            <i class="bi bi-person-plus-fill"></i> إضافة الطفل
+          </button>
+          <button onclick="closeAddChildModal()" style="flex:1;padding:.7rem;border-radius:var(--r-full);background:var(--gray-100);border:1.5px solid var(--gray-200);font-family:var(--font);font-size:.85rem;font-weight:800;cursor:pointer">
+            إلغاء
+          </button>
         </div>
       </div>
     </div>
@@ -1053,6 +1040,219 @@ function showToast(msg, type){
     setTimeout(function(){t.remove()},300);
   },2800);
 }
+
+/* ════ Children & Screen Time (real data) ════ */
+var _settChildren = [];
+var _settColors   = ['#2D7A45','#E07824','#6D28D9','#E8B830','#2563EB','#DB2777'];
+
+function getParentId(){
+  try { return JSON.parse(sessionStorage.getItem('makam_user')||'{}').id || ''; } catch(e){ return ''; }
+}
+
+function loadSettChildren(){
+  var pid = getParentId();
+  var list = document.getElementById('settChildrenList');
+  var stList = document.getElementById('settScreenTimeList');
+  if(!pid){
+    list.innerHTML = '<div style="padding:1.5rem;text-align:center;color:var(--gray-400);font-weight:700">سجّل الدخول لرؤية الأطفال</div>';
+    return;
+  }
+
+  fetch('/api/auth_children?parent_id=' + encodeURIComponent(pid))
+  .then(function(r){ return r.json(); })
+  .then(function(res){
+    var kids = (res.ok && res.data.children) ? res.data.children : [];
+    _settChildren = kids;
+
+    if(!kids.length){
+      list.innerHTML = '<div style="text-align:center;padding:1.5rem;color:var(--gray-400);font-weight:700"><i class="bi bi-people" style="font-size:2rem;display:block;margin-bottom:.4rem;opacity:.2"></i>لا يوجد أطفال مسجلون — أضف طفلك الأول!</div>';
+    } else {
+      list.innerHTML = kids.map(function(kid, i){
+        var c = _settColors[i % _settColors.length];
+        return '<div class="child-row" id="srow-'+kid.id+'">' +
+          '<div class="cr-avatar" style="background:'+c+'">'+kid.fname.charAt(0)+'</div>' +
+          '<div class="cr-info">' +
+            '<div class="cr-name">'+kid.fname+' '+kid.lname+'</div>' +
+            '<div class="cr-meta">' +
+              '<span><i class="bi bi-calendar2"></i> '+kid.age+' سنوات</span>' +
+              '<span style="opacity:.4">•</span>' +
+              '<span>@'+kid.username+'</span>' +
+              '<span style="opacity:.4">•</span>' +
+              '<span>'+(kid.gender==='girl'?'بنت':'ولد')+'</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="cr-actions">' +
+            '<button class="cr-btn crb-del" onclick="removeChild(\''+kid.id+'\',\''+kid.fname+'\')">' +
+              '<i class="bi bi-trash-fill"></i>' +
+            '</button>' +
+          '</div>' +
+        '</div>';
+      }).join('') +
+      '<div class="child-row" style="border-style:dashed;background:var(--gold-pale);border-color:rgba(232,184,48,.35);cursor:pointer;justify-content:center;gap:.6rem" onclick="openAddChildModal()">' +
+        '<i class="bi bi-plus-circle-fill" style="color:var(--gold2);font-size:1.2rem"></i>' +
+        '<span style="font-size:.87rem;font-weight:900;color:var(--gold2)">إضافة طفل جديد</span>' +
+      '</div>';
+    }
+
+    // Load screen time for each child
+    return fetch('/api/screen_time?parent_id=' + encodeURIComponent(pid));
+  })
+  .then(function(r){ return r ? r.json() : {ok:false}; })
+  .then(function(res){
+    var stMap = {};
+    if(res && res.ok && res.data && res.data.limits){
+      res.data.limits.forEach(function(l){ stMap[l.child_id] = l; });
+    }
+    renderScreenTimeList(stMap);
+  })
+  .catch(function(){
+    list.innerHTML = '<div style="padding:1.5rem;text-align:center;color:var(--gray-400);font-weight:700">تعذّر تحميل البيانات</div>';
+  });
+}
+
+function renderScreenTimeList(stMap){
+  var stList = document.getElementById('settScreenTimeList');
+  if(!_settChildren.length){
+    stList.innerHTML = '<div style="font-size:.82rem;color:var(--gray-400);font-weight:700;padding:.5rem">لا يوجد أطفال لضبط وقت الشاشة.</div>';
+    return;
+  }
+  stList.innerHTML = _settChildren.map(function(kid, i){
+    var c = _settColors[i % _settColors.length];
+    var lim = stMap[kid.id];
+    var mins = lim ? lim.daily_minutes : 0;
+    var enabled = mins > 0;
+    return '<div class="toggle-row" id="st-row-'+kid.id+'">' +
+      '<div class="tr-left">' +
+        '<div class="tr-icon" style="background:'+c+'22;color:'+c+'"><i class="bi bi-clock-history"></i></div>' +
+        '<div>' +
+          '<div class="tr-title">وقت الشاشة — '+kid.fname+'</div>' +
+          '<div class="tr-desc" id="st-desc-'+kid.id+'">' +
+            (enabled ? 'الحد اليومي: '+mins+' دقيقة' : 'لا يوجد حد (غير محدود)') +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="display:flex;align-items:center;gap:8px">' +
+        '<input type="number" id="st-inp-'+kid.id+'" min="0" max="480" value="'+mins+'" placeholder="0"' +
+          ' style="width:65px;padding:4px 8px;border:1.5px solid var(--gray-200);border-radius:8px;font-family:var(--font);font-size:.82rem;text-align:center">' +
+        '<span style="font-size:.73rem;color:var(--gray-400);font-weight:700">د/يوم</span>' +
+        '<button onclick="saveChildScreenTime(\''+kid.id+'\',\''+kid.fname+'\')" style="padding:5px 12px;border-radius:8px;background:var(--green);color:#fff;border:none;font-family:var(--font);font-size:.78rem;font-weight:800;cursor:pointer">حفظ</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function saveChildScreenTime(childId, name){
+  var val = parseInt(document.getElementById('st-inp-'+childId).value) || 0;
+  fetch('/api/screen_time', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ child_id: childId, daily_minutes: val, enabled: val > 0 })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(res){
+    if(res.ok){
+      var desc = document.getElementById('st-desc-'+childId);
+      if(desc) desc.textContent = val > 0 ? 'الحد اليومي: '+val+' دقيقة' : 'لا يوجد حد (غير محدود)';
+      showToast('تم حفظ وقت الشاشة لـ '+name+' ✓','green');
+    } else {
+      showToast('خطأ: '+(res.error||'تعذّر الحفظ'),'orange');
+    }
+  })
+  .catch(function(){ showToast('خطأ في الاتصال','orange'); });
+}
+
+function removeChild(childId, name){
+  if(!confirm('هل أنت متأكد من حذف ملف '+name+'؟ لا يمكن التراجع.')) return;
+  fetch('/api/admin_remove_child', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ child_id: childId })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(res){
+    if(res.ok){
+      var row = document.getElementById('srow-'+childId);
+      if(row){ row.style.opacity='0'; row.style.transition='.3s'; setTimeout(function(){ loadSettChildren(); },350); }
+      showToast('تم حذف ملف '+name,'orange');
+    } else {
+      alert('خطأ: '+(res.error||'تعذّر الحذف'));
+    }
+  })
+  .catch(function(){ alert('حدث خطأ في الاتصال'); });
+}
+
+/* ── Add child modal ── */
+function openAddChildModal(){
+  var m = document.getElementById('addChildModalSett');
+  m.style.display = 'flex';
+  document.getElementById('acResult').style.display = 'none';
+  ['acFname','acLname','acAge','acDisease'].forEach(function(id){ document.getElementById(id).value=''; });
+}
+function closeAddChildModal(){
+  document.getElementById('addChildModalSett').style.display = 'none';
+}
+function submitAddChild(){
+  var pid   = getParentId();
+  var fname = document.getElementById('acFname').value.trim();
+  var lname = document.getElementById('acLname').value.trim();
+  var age   = parseInt(document.getElementById('acAge').value) || 0;
+  var gender= document.getElementById('acGender').value;
+  var dis   = document.getElementById('acDisease').value.trim();
+
+  if(!fname||!lname||!age){ alert('يرجى ملء جميع الحقول المطلوبة'); return; }
+
+  var btn = document.getElementById('acSubmitBtn');
+  btn.textContent = 'جاري الإضافة...'; btn.disabled = true;
+
+  fetch('/api/auth_add_child', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ parent_id: pid, fname: fname, lname: lname, age: age, gender: gender, disease: dis })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(res){
+    btn.innerHTML = '<i class="bi bi-person-plus-fill"></i> إضافة الطفل';
+    btn.disabled = false;
+    var el = document.getElementById('acResult');
+    el.style.display = 'block';
+    if(res.ok){
+      var d = res.data;
+      el.style.background='#f0fff4'; el.style.border='1.5px solid #bbf7d0'; el.style.color='#166534';
+      el.innerHTML = '✅ تمت الإضافة!<br><strong>اسم المستخدم:</strong> '+d.username+'<br><strong>رمز الدخول:</strong> '+d.password.slice(0,4)+' – '+d.password.slice(4);
+      // Refresh
+      loadSettChildren();
+      // Also update sessionStorage children list for the profile picker
+      var user = JSON.parse(sessionStorage.getItem('makam_user')||'{}');
+      if(user && user.children){
+        user.children.push({ id: d.id, fname: fname, lname: lname, age: age, username: d.username, gender: gender });
+        sessionStorage.setItem('makam_user', JSON.stringify(user));
+      }
+    } else {
+      el.style.background='#fff1f2'; el.style.border='1.5px solid #fecdd3'; el.style.color='#be123c';
+      el.textContent = '❌ خطأ: '+(res.error||'تعذّرت الإضافة');
+    }
+  })
+  .catch(function(){
+    btn.innerHTML = '<i class="bi bi-person-plus-fill"></i> إضافة الطفل';
+    btn.disabled = false;
+    alert('حدث خطأ في الاتصال');
+  });
+}
+
+/* Load children when tab is opened */
+(function(){
+  var origSwitch = window.switchTab;
+  window.switchTab = function(tab){
+    origSwitch && origSwitch(tab);
+    if(tab === 'children') loadSettChildren();
+  };
+  // Also load on DOMContentLoaded if already on children tab
+  document.addEventListener('DOMContentLoaded', function(){
+    if(document.getElementById('sec-children').classList.contains('active')){
+      loadSettChildren();
+    }
+  });
+})();
 </script>
 
 <?php require_once __DIR__ . '/../../../site/frontend/includes/dashboard/parent/footer.php'; ?>

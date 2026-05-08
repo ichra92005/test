@@ -13,6 +13,24 @@ if (!$body) {
     exit;
 }
 
+/* ── list_parents action for admin panel ── */
+if (($body['action'] ?? '') === 'list_parents') {
+    $db_path = __DIR__ . '/../database/users/parents.json';
+    $db = file_exists($db_path) ? (json_decode(file_get_contents($db_path), true) ?: []) : [];
+    $parents = array_map(function($p) {
+        return [
+            'id'          => $p['id'],
+            'fname'       => $p['fname'],
+            'lname'       => $p['lname'],
+            'email'       => $p['email'],
+            'children_ids'=> $p['children_ids'] ?? [],
+            'created_at'  => $p['created_at'] ?? '',
+        ];
+    }, $db['parents'] ?? []);
+    echo json_encode(['ok'=>true,'data'=>['parents'=>$parents]], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 $type = $body['type'] ?? '';
 $name = trim($body['name'] ?? '');
 $email_username = trim($body['email_username'] ?? '');

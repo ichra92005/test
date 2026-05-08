@@ -72,7 +72,7 @@ if ($type === 'parent') {
         'lname'     => $found['lname'],
         'email'     => $found['email'],
         'children'  => array_map(function($c){
-            return ['id'=>$c['id'],'fname'=>$c['fname'],'lname'=>$c['lname'],'age'=>$c['age'],'username'=>$c['username']];
+            return ['id'=>$c['id'],'fname'=>$c['fname'],'lname'=>$c['lname'],'age'=>$c['age'],'username'=>$c['username'],'gender'=>$c['gender']??'boy'];
         }, $children_of_parent),
     ]);
 }

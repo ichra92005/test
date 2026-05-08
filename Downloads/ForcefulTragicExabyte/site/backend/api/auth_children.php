@@ -24,15 +24,22 @@ $db       = load_db(DB_CHILDREN);
 $all      = $db['children'] ?? [];
 $children = array_values(array_filter($all, fn($c) => $c['parent_id'] === $parent_id));
 
-/* نُرجع فقط الحقول المطلوبة — كلمة السر هي الـ id */
+/* Load screen time limits */
+$st_file = __DIR__ . '/../database/users/screen_time.json';
+$st_data = file_exists($st_file) ? (json_decode(file_get_contents($st_file), true) ?: ['limits'=>[]]) : ['limits'=>[]];
+$st_limits = $st_data['limits'] ?? [];
+
 $result = array_map(fn($c) => [
-    'id'       => $c['id'],
-    'fname'    => $c['fname'],
-    'lname'    => $c['lname'],
-    'age'      => $c['age'],
-    'username' => $c['username'],
-    'password' => $c['id'],          /* كلمة سر الطفل = رقمه الثماني */
-    'created_at' => $c['created_at'] ?? '',
+    'id'                  => $c['id'],
+    'fname'               => $c['fname'],
+    'lname'               => $c['lname'],
+    'age'                 => $c['age'],
+    'gender'              => $c['gender'] ?? 'boy',
+    'username'            => $c['username'],
+    'password'            => $c['id'],
+    'disease'             => $c['disease'] ?? '',
+    'created_at'          => $c['created_at'] ?? '',
+    'screen_time_minutes' => (int)($st_limits[$c['id']] ?? 0),
 ], $children);
 
 ok(['children' => $result]);

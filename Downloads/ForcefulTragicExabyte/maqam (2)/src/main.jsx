@@ -29,17 +29,17 @@ const PALETTES = {
   desert: {name:'رمال الصحراء',    clay:'#B5651D', amber:'#D4A574', sun:'#F4D8A8', mint:'#7C8C5B', cream:'#FBF3E2', paper:'#FFF8EA', soft:'#F0E2BF'},
 };
 
-function getSessionProfile() {
+function readChildSession() {
   try {
     const u = JSON.parse(sessionStorage.getItem('makam_user') || 'null');
     if (u && u.type === 'child') {
-      const gender = u.gender || 'boy';
+      const age = parseInt(u.age) || 0;
       return {
-        id:     u.id,
-        name:   u.fname,
-        gender,
-        avatar: gender === 'girl' ? '/assets/pfp/girl.png' : '/assets/pfp/boy.png',
-        age:    u.age || 0,
+        id:      u.id,
+        name:    u.fname,
+        gender:  u.gender || 'boy',
+        ageBand: age >= 11 ? '11+' : age >= 7 ? '7-10' : '3-6',
+        avatar:  u.gender === 'girl' ? '/assets/pfp/girl.png' : '/assets/pfp/boy.png',
       };
     }
   } catch {}
@@ -52,10 +52,7 @@ class ErrorBoundary extends React.Component {
     this.state = { hasError: false, error: null, info: null };
   }
   static getDerivedStateFromError(error) { return { hasError: true, error }; }
-  componentDidCatch(error, info) {
-    this.setState({ info });
-    console.error('ErrorBoundary:', error, info);
-  }
+  componentDidCatch(error, info) { this.setState({ info }); console.error(error, info); }
   render() {
     if (this.state.hasError) {
       return (
@@ -71,66 +68,90 @@ class ErrorBoundary extends React.Component {
 }
 
 function App() {
-  const sessionProfile = getSessionProfile();
+  const childProfile = readChildSession();
 
-  // Go straight to app if a real child session exists, otherwise show landing
-  const [view, setView]           = useS_main(sessionProfile ? 'app' : 'landing');
-  const [activeProfile]           = useS_main(sessionProfile);
-
+  const [view, setView] = useS_main(childProfile ? 'app' : 'landing');
+  const [activeProfile, setActiveProfile] = useS_main(childProfile);
   const [t, setTweak] = useTweaks(/*EDITMODE-BEGIN*/{
     "palette": "warm",
     "landingVariant": "hero"
   }/*EDITMODE-END*/);
 
+  // Apply palette CSS vars
   useE_main(() => {
     const p = PALETTES[t.palette] || PALETTES.warm;
     const r = document.documentElement.style;
-    r.setProperty('--c-clay',  p.clay);
+    r.setProperty('--c-clay', p.clay);
     r.setProperty('--c-amber', p.amber);
-    r.setProperty('--c-sun',   p.sun);
-    r.setProperty('--c-mint',  p.mint);
+    r.setProperty('--c-sun', p.sun);
+    r.setProperty('--c-mint', p.mint);
     r.setProperty('--c-cream', p.cream);
     r.setProperty('--c-paper', p.paper);
-    r.setProperty('--c-soft',  p.soft);
+    r.setProperty('--c-soft', p.soft);
   }, [t.palette]);
 
+  // Pre-load essential assets
+  useE_main(() => {
+    ['/assets/logo-maqam-transparent.png', '/assets/pfp/girl.png', '/assets/pfp/boy.png', '/assets/charchters/algeria-map.png']
+      .forEach(src => { const img = new Image(); img.src = src; });
+  }, []);
+
+  // Hide loader
   useE_main(() => {
     const l = document.getElementById('loading');
     if (l) l.style.display = 'none';
   }, []);
 
-  const profile = activeProfile || {
-    id:'guest', name:'طفل', gender:'boy', avatar:'/assets/pfp/boy.png', age:8,
-  };
+  function handleExit() {
+    // Return to profile selection page
+    window.location.href = '/dashboard/profiles';
+  }
 
   return (
     <ErrorBoundary>
       {view === 'landing' && (
-        <Landing onEnter={() => setView('app')} variant={t.landingVariant}/>
+        <Landing onEnter={() => { window.location.href = '/dashboard/profiles'; }} variant={t.landingVariant}/>
       )}
-      {view === 'app' && (
-        <AppShell onExit={() => setView('landing')} palette={t.palette} profile={profile}/>
+      {view === 'app' && activeProfile && (
+        <AppShell onExit={handleExit} palette={t.palette} profile={activeProfile}/>
+      )}
+      {view === 'app' && !activeProfile && (
+        <div style={{display:'grid', placeItems:'center', minHeight:'100vh', background:'var(--c-paper)'}}>
+          <div style={{textAlign:'center', padding:32}}>
+            <div style={{fontSize:48, marginBottom:16}}>😅</div>
+            <p style={{fontFamily:'var(--font-arabic)', fontSize:18, color:'var(--c-ink)', marginBottom:20}}>
+              لم يتم العثور على ملف الطفل. يرجى تسجيل الدخول.
+            </p>
+            <button onClick={() => { window.location.href = '/login'; }} style={{
+              padding:'12px 28px', borderRadius:12, background:'var(--c-clay)',
+              color:'#fff', border:'none', fontFamily:'var(--font-arabic)',
+              fontSize:16, fontWeight:700, cursor:'pointer'
+            }}>تسجيل الدخول</button>
+          </div>
+        </div>
       )}
       <TweaksPanel title="إعدادات">
         <TweakSection label="النسخة">
           <TweakRadio
             label="الصفحة الرئيسية"
             value={t.landingVariant}
-            onChange={v => setTweak('landingVariant', v)}
-            options={[{value:'hero', label:'بطل'},{value:'scroll', label:'قصة'}]}
+            onChange={v=>setTweak('landingVariant', v)}
+            options={[
+              {value:'hero', label:'بطل'},
+              {value:'scroll', label:'قصة'},
+            ]}
           />
         </TweakSection>
         <TweakSection label="الألوان">
           <TweakColor
             label="اللوحة"
             value={t.palette}
-            onChange={v => setTweak('palette', v)}
+            onChange={v=>setTweak('palette', v)}
             options={['warm','cool','desert']}
           />
         </TweakSection>
         <TweakSection label="تنقّل">
-          <TweakButton label="الصفحة الرئيسية" onClick={() => setView('landing')}/>
-          <TweakButton label="صفحة الطفل"      onClick={() => setView('app')}/>
+          <TweakButton label="اختيار الملف" onClick={()=>{ window.location.href='/dashboard/profiles'; }}/>
         </TweakSection>
       </TweaksPanel>
     </ErrorBoundary>
